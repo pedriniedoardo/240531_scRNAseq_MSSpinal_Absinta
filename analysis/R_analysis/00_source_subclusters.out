@@ -1,0 +1,1296 @@
+- The project is out-of-sync -- use `renv::status()` for details.
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1401878
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9569
+Number of communities: 7
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1401878
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9424
+Number of communities: 12
+Elapsed time: 11 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1401878
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9328
+Number of communities: 16
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1401878
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9246
+Number of communities: 18
+Elapsed time: 9 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1401878
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9168
+Number of communities: 19
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1401878
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9097
+Number of communities: 20
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1401878
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9027
+Number of communities: 21
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1401878
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8961
+Number of communities: 23
+Elapsed time: 8 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1401878
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8900
+Number of communities: 24
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1401878
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8839
+Number of communities: 24
+Elapsed time: 9 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1167159
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9457
+Number of communities: 7
+Elapsed time: 9 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1167159
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9121
+Number of communities: 8
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1167159
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8934
+Number of communities: 10
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1167159
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8782
+Number of communities: 11
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1167159
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8650
+Number of communities: 13
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1167159
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8530
+Number of communities: 15
+Elapsed time: 11 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1167159
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8435
+Number of communities: 16
+Elapsed time: 10 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1167159
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8340
+Number of communities: 17
+Elapsed time: 9 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1167159
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8254
+Number of communities: 18
+Elapsed time: 9 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 42135
+Number of edges: 1167159
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8181
+Number of communities: 20
+Elapsed time: 9 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 349777
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9563
+Number of communities: 8
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 349777
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9322
+Number of communities: 9
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 349777
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9127
+Number of communities: 11
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 349777
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8947
+Number of communities: 11
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 349777
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8820
+Number of communities: 14
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 349777
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8716
+Number of communities: 14
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 349777
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8612
+Number of communities: 14
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 349777
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8513
+Number of communities: 14
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 349777
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8424
+Number of communities: 17
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 349777
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8340
+Number of communities: 18
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 400544
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9658
+Number of communities: 10
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 400544
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9482
+Number of communities: 12
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 400544
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9326
+Number of communities: 12
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 400544
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9168
+Number of communities: 12
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 400544
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9052
+Number of communities: 13
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 400544
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8945
+Number of communities: 15
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 400544
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8844
+Number of communities: 15
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 400544
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8746
+Number of communities: 17
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 400544
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8660
+Number of communities: 19
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 9709
+Number of edges: 400544
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8575
+Number of communities: 20
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 216328
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9535
+Number of communities: 8
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 216328
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9318
+Number of communities: 13
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 216328
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9173
+Number of communities: 14
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 216328
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9077
+Number of communities: 18
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 216328
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8989
+Number of communities: 18
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 216328
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8904
+Number of communities: 18
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 216328
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8814
+Number of communities: 18
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 216328
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8735
+Number of communities: 18
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 216328
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8666
+Number of communities: 20
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 216328
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8604
+Number of communities: 22
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 250020
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9673
+Number of communities: 12
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 250020
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9524
+Number of communities: 14
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 250020
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9394
+Number of communities: 17
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 250020
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9290
+Number of communities: 20
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 250020
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9184
+Number of communities: 20
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 250020
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9097
+Number of communities: 21
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 250020
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9017
+Number of communities: 22
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 250020
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8941
+Number of communities: 23
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 250020
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8867
+Number of communities: 24
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 6278
+Number of edges: 250020
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8804
+Number of communities: 24
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 2753373
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9582
+Number of communities: 10
+Elapsed time: 31 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 2753373
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9449
+Number of communities: 14
+Elapsed time: 33 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 2753373
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9352
+Number of communities: 18
+Elapsed time: 33 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 2753373
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9275
+Number of communities: 20
+Elapsed time: 35 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 2753373
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9213
+Number of communities: 23
+Elapsed time: 34 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 2753373
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9160
+Number of communities: 26
+Elapsed time: 38 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 2753373
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9105
+Number of communities: 26
+Elapsed time: 34 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 2753373
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9060
+Number of communities: 30
+Elapsed time: 36 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 2753373
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9018
+Number of communities: 31
+Elapsed time: 35 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 2753373
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8977
+Number of communities: 32
+Elapsed time: 34 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 1968059
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9413
+Number of communities: 8
+Elapsed time: 34 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 1968059
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9067
+Number of communities: 13
+Elapsed time: 40 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 1968059
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8852
+Number of communities: 15
+Elapsed time: 32 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 1968059
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8692
+Number of communities: 15
+Elapsed time: 34 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 1968059
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8512
+Number of communities: 16
+Elapsed time: 35 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 1968059
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8385
+Number of communities: 17
+Elapsed time: 34 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 1968059
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8289
+Number of communities: 20
+Elapsed time: 32 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 1968059
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8205
+Number of communities: 21
+Elapsed time: 34 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 1968059
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8117
+Number of communities: 22
+Elapsed time: 35 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 85349
+Number of edges: 1968059
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8042
+Number of communities: 26
+Elapsed time: 32 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 473520
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9620
+Number of communities: 9
+Elapsed time: 2 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 473520
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9466
+Number of communities: 15
+Elapsed time: 5 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 473520
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9334
+Number of communities: 16
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 473520
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9231
+Number of communities: 17
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 473520
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9137
+Number of communities: 18
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 473520
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9044
+Number of communities: 19
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 473520
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8951
+Number of communities: 19
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 473520
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8860
+Number of communities: 20
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 473520
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8772
+Number of communities: 21
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 473520
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8712
+Number of communities: 23
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 467872
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9605
+Number of communities: 8
+Elapsed time: 2 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 467872
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9329
+Number of communities: 9
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 467872
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9123
+Number of communities: 12
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 467872
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8985
+Number of communities: 12
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 467872
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8852
+Number of communities: 12
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 467872
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8716
+Number of communities: 14
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 467872
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8587
+Number of communities: 14
+Elapsed time: 1 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 467872
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8481
+Number of communities: 16
+Elapsed time: 2 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 467872
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8381
+Number of communities: 17
+Elapsed time: 2 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 12210
+Number of edges: 467872
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8296
+Number of communities: 17
+Elapsed time: 2 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 719507
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9702
+Number of communities: 11
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 719507
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9550
+Number of communities: 12
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 719507
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9440
+Number of communities: 16
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 719507
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9334
+Number of communities: 16
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 719507
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9238
+Number of communities: 19
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 719507
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9152
+Number of communities: 19
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 719507
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9082
+Number of communities: 23
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 719507
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9017
+Number of communities: 24
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 719507
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8956
+Number of communities: 24
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 719507
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8899
+Number of communities: 26
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 766724
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9747
+Number of communities: 9
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 766724
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9589
+Number of communities: 12
+Elapsed time: 4 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 766724
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9456
+Number of communities: 13
+Elapsed time: 4 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 766724
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9325
+Number of communities: 14
+Elapsed time: 4 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 766724
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9198
+Number of communities: 14
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 766724
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9085
+Number of communities: 15
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 766724
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8983
+Number of communities: 15
+Elapsed time: 4 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 766724
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8876
+Number of communities: 17
+Elapsed time: 4 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 766724
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8786
+Number of communities: 17
+Elapsed time: 3 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 20489
+Number of edges: 766724
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8697
+Number of communities: 19
+Elapsed time: 4 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 135288
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9487
+Number of communities: 5
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 135288
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9295
+Number of communities: 10
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 135288
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9156
+Number of communities: 11
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 135288
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9035
+Number of communities: 13
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 135288
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8925
+Number of communities: 16
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 135288
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8836
+Number of communities: 16
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 135288
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8755
+Number of communities: 17
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 135288
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8678
+Number of communities: 17
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 135288
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8611
+Number of communities: 19
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 135288
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8547
+Number of communities: 19
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 160122
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9673
+Number of communities: 9
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 160122
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9508
+Number of communities: 10
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 160122
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9353
+Number of communities: 10
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 160122
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9229
+Number of communities: 13
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 160122
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9123
+Number of communities: 16
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 160122
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.9029
+Number of communities: 17
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 160122
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8942
+Number of communities: 17
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 160122
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8857
+Number of communities: 18
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 160122
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8779
+Number of communities: 18
+Elapsed time: 0 seconds
+Modularity Optimizer version 1.3.0 by Ludo Waltman and Nees Jan van Eck
+
+Number of nodes: 4037
+Number of edges: 160122
+
+Running Louvain algorithm...
+Maximum modularity in 10 random starts: 0.8703
+Number of communities: 19
+Elapsed time: 0 seconds
+[[1]]
+            used   (Mb) gc trigger   (Mb)   max used    (Mb)
+Ncells   9829325  525.0   16797944  897.2   16797944   897.2
+Vcells 446204167 3404.3 1259754212 9611.2 3165543975 24151.2
+
+[[2]]
+            used  (Mb) gc trigger   (Mb)   max used    (Mb)
+Ncells   9832760 525.2   16797944  897.2   16797944   897.2
+Vcells 105706529 806.5  657299859 5014.8 3165543975 24151.2
+
+[[3]]
+           used  (Mb) gc trigger   (Mb)   max used    (Mb)
+Ncells  9829471 525.0   16797944  897.2   16797944   897.2
+Vcells 87203584 665.4  457329443 3489.2 3165543975 24151.2
+
+[[4]]
+            used   (Mb) gc trigger    (Mb)   max used    (Mb)
+Ncells   9896938  528.6   16797944   897.2   16797944   897.2
+Vcells 921029935 7027.0 2670587671 20375.0 4172793100 31835.9
+
+[[5]]
+            used   (Mb) gc trigger   (Mb)   max used    (Mb)
+Ncells   9824001  524.7   16797944  897.2   16797944   897.2
+Vcells 147778460 1127.5 1213649071 9259.5 4172793100 31835.9
+
+[[6]]
+            used   (Mb) gc trigger   (Mb)   max used    (Mb)
+Ncells   9836980  525.4   16797944  897.2   16797944   897.2
+Vcells 215195703 1641.9  582246659 4442.2 4172793100 31835.9
+
+[[7]]
+           used  (Mb) gc trigger   (Mb)   max used    (Mb)
+Ncells  9820761 524.5   16797944  897.2   16797944   897.2
+Vcells 60252535 459.7  479358342 3657.3 4172793100 31835.9
+
