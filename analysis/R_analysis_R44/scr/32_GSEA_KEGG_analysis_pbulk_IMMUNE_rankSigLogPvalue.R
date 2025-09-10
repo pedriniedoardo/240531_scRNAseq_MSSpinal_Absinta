@@ -218,7 +218,7 @@ p2 <- test %>%
   slice_max(abs(NES.logfc),n = 10) %>%
   mutate(Term = str_remove_all(pathway,pattern = "KEGG_MEDICUS_") %>% str_sub(start = 1,end = 50)) %>%
   mutate(Term = fct_reorder(Term, NES.logfc,.desc = F)) %>%
-  mutate(direction = factor(sign(NES.pvalue),labels = c(1,-1),levels = c(1,-1))) %>%
+  mutate(direction = factor(sign(NES.logfc),labels = c(1,-1),levels = c(1,-1))) %>%
   ggplot(aes(x = NES.logfc,y=Term)) + 
   geom_point(aes(size = -log(padj.logfc),col=direction)) +
   theme_bw() +
