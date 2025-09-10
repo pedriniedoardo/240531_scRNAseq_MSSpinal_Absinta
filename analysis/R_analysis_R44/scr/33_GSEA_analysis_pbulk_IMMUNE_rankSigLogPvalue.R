@@ -314,7 +314,7 @@ read_tsv(paste0("../../out/table/analysis_R44/33_df_table_GSEA_HALLMARK_rankSigL
   pull(leadingEdge) %>%
   str_split(pattern = "\\|") %>%
   unlist() %>%
-  saveRDS("../../out/object/33_leadingEges_HALLMARK_INTERFERON_ALPHA_RESPONSE_rankSigLogPval.rds")
+  saveRDS("../../out/object/analysis_R44/33_leadingEges_HALLMARK_INTERFERON_ALPHA_RESPONSE_rankSigLogPval.rds")
   
 # plot volcano like plot for all the annoations together
 
