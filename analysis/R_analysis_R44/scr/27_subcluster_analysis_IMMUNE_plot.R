@@ -463,6 +463,12 @@ library(finalfit)
 meta_test <- data.combined@meta.data
 # filter(treat != "CSF.MS_RAPA")
 
+# build a LUT foe the samples to add after the proportion estimates
+LUT_samples <- meta_test %>%
+  group_by(sample_id, diagnosis_short, pathological_stage_short, demyelination_short) %>%
+  summarise()
+
+# diagnosis
 table(meta_test$sample_id,meta_test$diagnosis_short)
 table(meta_test$diagnosis_short,meta_test$sample_id)
 out_diagnosis <- propeller(clusters = meta_test$RNA_snn_res.0.4,
@@ -471,42 +477,71 @@ out_diagnosis <- propeller(clusters = meta_test$RNA_snn_res.0.4,
 
 out_diagnosis %>%
   rownames_to_column("RNA_snn_res.0.4") %>%
-  write_tsv("../../out/table/analysis_R44/27_propeller_res0.4_IMMUNE_subcluster.tsv")
+  write_tsv("../../out/table/analysis_R44/27_propeller_res0.4_IMMUNE_subcluster_diagnosis.tsv")
+
+# pathology
+table(meta_test$sample_id,meta_test$diagnosis_short)
+table(meta_test$diagnosis_short,meta_test$sample_id)
+out_pathology <- propeller(clusters = meta_test$RNA_snn_res.0.4,
+                           sample = paste0(meta_test$sample_id),
+                           group = meta_test$pathological_stage_short)
+
+out_pathology %>%
+  rownames_to_column("RNA_snn_res.0.4") %>%
+  write_tsv("../../out/table/analysis_R44/27_propeller_res0.4_IMMUNE_subcluster_pathology.tsv")
+
+# demyelination
+table(meta_test$sample_id,meta_test$diagnosis_short)
+table(meta_test$diagnosis_short,meta_test$sample_id)
+out_demyelination <- propeller(clusters = meta_test$RNA_snn_res.0.4,
+                               sample = paste0(meta_test$sample_id),
+                               group = meta_test$demyelination_short)
+
+out_demyelination %>%
+  rownames_to_column("RNA_snn_res.0.4") %>%
+  write_tsv("../../out/table/analysis_R44/27_propeller_res0.4_IMMUNE_subcluster_demyelinatino.tsv")
+
+# summarise the counts of cell per cluster per sample.
+# force 0 for the missing combination of cluster sample
+df_summary <- meta_test %>% 
+  # mutate(group_id = dataset) %>%
+  group_by(RNA_snn_res.0.4,
+           sample_id,
+           diagnosis_short) %>% 
+  summarise(n=n(),.groups = "drop") %>% 
+  # add the 0 for all the combinations of cluster per sample
+  complete(RNA_snn_res.0.4,sample_id, fill = list(n = 0)) %>%
+  dplyr::select(-diagnosis_short) %>%
+  left_join(LUT_samples,by="sample_id") %>%
+  group_by(sample_id) %>% 
+  mutate(tot = sum(n),
+         prop = n/tot)
+
+df_summary %>%
+  write_tsv("../../out/table/analysis_R44/27_df_summary_diagnosis_res0.4_IMMUNE_subcluster.tsv")
+
+df_summary %>%
+  filter(n == 0)
 
 # plotting diagnosis ------------------------------------------------------
 # default plot
 speckle::plotCellTypeProps(x = data.combined,
                            clusters = data.combined$RNA_snn_res.0.4,
                            sample = data.combined$diagnosis_short)+theme_minimal()+theme(panel.grid = element_blank(),axis.text.x = element_text(hjust = 1,angle = 45))
-ggsave("../../out/plot/analysis_R44/27_plot_propeller_res0.4_IMMUNE_subcluster.pdf",height = 5,width = 5)
-
-# custom plot
-df_summary_diagnosis <- meta_test %>% 
-  # mutate(group_id = dataset) %>%
-  group_by(RNA_snn_res.0.4,
-           sample_id,
-           diagnosis_short) %>% 
-  summarise(n=n()) %>% 
-  ungroup() %>% 
-  group_by(sample_id) %>% 
-  mutate(tot = sum(n),
-         prop = n/tot)
-
-df_summary_diagnosis %>%
-  write_tsv("../../out/table/analysis_R44/27_df_summary_diagnosis_res0.4_IMMUNE_subcluster.tsv")
+ggsave("../../out/plot/analysis_R44/27_plot_propeller_res0.4_IMMUNE_subcluster_diagnosis.pdf",height = 5,width = 5)
 
 # plot 01
-df_summary_diagnosis %>%
+df_summary %>%
   ggplot(aes(x=diagnosis_short,y=prop))+
   geom_boxplot(outlier.shape = NA)+
   geom_point(position = position_jitter(width = 0.1),shape=1,alpha =0.7)+
   facet_wrap(~RNA_snn_res.0.4,scales = "free")+
   theme_bw()+
   theme(strip.background = element_blank(),axis.text.x = element_text(hjust = 1,angle = 45))
-ggsave("../../out/plot/analysis_R44/27_propeller_plot01_res0.4_IMMUNE_subcluster.pdf",width = 9,height = 6)
+ggsave("../../out/plot/analysis_R44/27_propeller_plot01_res0.4_IMMUNE_subcluster_diagnosis.pdf",width = 9,height = 6)
 
 # plot 02
-df_summary_diagnosis %>%
+df_summary %>%
   ggplot() +
   geom_boxplot(aes(x=RNA_snn_res.0.4,y=prop,color=diagnosis_short),outlier.shape = NA) +
   geom_point(aes(x=RNA_snn_res.0.4,y=prop,color=diagnosis_short),position = position_jitterdodge(jitter.width = 0.1,dodge.width = 0.8),alpha=0.7) +
@@ -514,3 +549,55 @@ df_summary_diagnosis %>%
   theme(axis.text.x = element_text(hjust = 1,angle = 90))+
   scale_y_sqrt()
 # ggsave("../../out/plot/analysis_R44/manualClean/propeller_plot02_diagnosis_cellid.pdf",width = 8,height = 5)
+
+# plotting pathology ------------------------------------------------------
+# default plot
+speckle::plotCellTypeProps(x = data.combined,
+                           clusters = data.combined$RNA_snn_res.0.4,
+                           sample = data.combined$pathological_stage_short)+theme_minimal()+theme(panel.grid = element_blank(),axis.text.x = element_text(hjust = 1,angle = 45))
+ggsave("../../out/plot/analysis_R44/27_plot_propeller_res0.4_IMMUNE_subcluster_pathology.pdf",height = 5,width = 5)
+
+# plot 01
+df_summary %>%
+  ggplot(aes(x=pathological_stage_short,y=prop))+
+  geom_boxplot(outlier.shape = NA)+
+  geom_point(position = position_jitter(width = 0.1),shape=1,alpha =0.7)+
+  facet_wrap(~RNA_snn_res.0.4,scales = "free")+
+  theme_bw()+
+  theme(strip.background = element_blank(),axis.text.x = element_text(hjust = 1,angle = 45))
+ggsave("../../out/plot/analysis_R44/27_propeller_plot01_res0.4_IMMUNE_subcluster_pathology.pdf",width = 9,height = 6)
+
+# plot 02
+df_summary %>%
+  ggplot() +
+  geom_boxplot(aes(x=RNA_snn_res.0.4,y=prop,color=pathological_stage_short),outlier.shape = NA) +
+  geom_point(aes(x=RNA_snn_res.0.4,y=prop,color=pathological_stage_short),position = position_jitterdodge(jitter.width = 0.1,dodge.width = 0.8),alpha=0.7) +
+  theme_cowplot()+
+  theme(axis.text.x = element_text(hjust = 1,angle = 90))+
+  scale_y_sqrt()
+
+# plotting demyelination --------------------------------------------------
+# default plot
+speckle::plotCellTypeProps(x = data.combined,
+                           clusters = data.combined$RNA_snn_res.0.4,
+                           sample = data.combined$demyelination_short)+theme_minimal()+theme(panel.grid = element_blank(),axis.text.x = element_text(hjust = 1,angle = 45))
+ggsave("../../out/plot/analysis_R44/27_plot_propeller_res0.4_IMMUNE_subcluster_demyelination.pdf",height = 5,width = 5)
+
+# plot 01
+df_summary %>%
+  ggplot(aes(x=demyelination_short,y=prop))+
+  geom_boxplot(outlier.shape = NA)+
+  geom_point(position = position_jitter(width = 0.1),shape=1,alpha =0.7)+
+  facet_wrap(~RNA_snn_res.0.4,scales = "free")+
+  theme_bw()+
+  theme(strip.background = element_blank(),axis.text.x = element_text(hjust = 1,angle = 45))
+ggsave("../../out/plot/analysis_R44/27_propeller_plot01_res0.4_IMMUNE_subcluster_demyelination.pdf",width = 9,height = 6)
+
+# plot 02
+df_summary %>%
+  ggplot() +
+  geom_boxplot(aes(x=RNA_snn_res.0.4,y=prop,color=demyelination_short),outlier.shape = NA) +
+  geom_point(aes(x=RNA_snn_res.0.4,y=prop,color=demyelination_short),position = position_jitterdodge(jitter.width = 0.1,dodge.width = 0.8),alpha=0.7) +
+  theme_cowplot()+
+  theme(axis.text.x = element_text(hjust = 1,angle = 90))+
+  scale_y_sqrt()
