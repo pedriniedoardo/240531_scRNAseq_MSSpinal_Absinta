@@ -98,7 +98,7 @@ design <- model.matrix(~ location + treat)
 colnames(design)[1] <- c("intercept")
 
 # save the disign
-saveRDS(design,paste0("../../out/object/30_design_mono_pBulk","IMMUNE",".rds"))
+saveRDS(design,paste0("../../out/object/analysis_R44/30_design_mono_pBulk","IMMUNE",".rds"))
 
 # Create DESeq2 object
 dds <- DESeqDataSetFromMatrix(countData = counts,
