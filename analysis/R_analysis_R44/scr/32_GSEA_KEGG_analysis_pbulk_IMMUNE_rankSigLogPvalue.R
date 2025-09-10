@@ -140,7 +140,7 @@ df_tables_GSEA_all_non_redundant %>%
   mutate(pathway2 = str_remove(pathway,pattern = "KEGG_") %>%
            str_sub(start = 1,end = 35)) %>%
   # mutate(min_log10_padj = -log10(padj)) %>%
-  ggplot(aes(y = -log10(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
+  ggplot(aes(y = -log(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
   theme(strip.background = element_blank())+
   geom_text_repel(size = 2,box.padding = 0.5,segment.alpha = 0.6,max.overlaps = 10)+
   geom_hline(yintercept = -log(0.05),col="gray",linetype="dashed")
@@ -152,7 +152,7 @@ df_tables_GSEA_all %>%
   mutate(pathway2 = str_remove(pathway,pattern = "KEGG_") %>%
            str_sub(start = 1,end = 35)) %>%
   # mutate(min_log10_padj = -log10(padj)) %>%
-  ggplot(aes(y = -log10(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
+  ggplot(aes(y = -log(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
   theme(strip.background = element_blank())+
   geom_text_repel(size = 2,box.padding = 0.5,segment.alpha = 0.6,max.overlaps = 10)+
   geom_hline(yintercept = -log(0.05),col="gray",linetype="dashed")
