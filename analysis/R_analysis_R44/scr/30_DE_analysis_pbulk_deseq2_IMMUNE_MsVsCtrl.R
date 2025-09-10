@@ -440,7 +440,12 @@ plot_volcano_shr %>%
   geom_hline(yintercept = (-log(0.05)),col="red",linetype="dashed")+
   scale_color_manual(values = c("black","red"))+theme(legend.position = "none")+
   ggrepel::geom_text_repel(
-    data = plot_volcano_shr %>% group_by(condVsCTRL) %>% arrange(padj) %>% dplyr::slice(1:30)%>% filter(abs(log2FoldChange)>0.5),
+    data = plot_volcano_shr %>% 
+        group_by(condVsCTRL) %>% 
+        arrange(padj) %>% 
+        dplyr::slice(1:30)%>% 
+        filter(abs(log2FoldChange)>0.5) %>% 
+        filter(padj<0.05),
     aes(label = symbol),segment.alpha=0.4) +
   facet_wrap(~condVsCTRL)+
   theme_bw()+
