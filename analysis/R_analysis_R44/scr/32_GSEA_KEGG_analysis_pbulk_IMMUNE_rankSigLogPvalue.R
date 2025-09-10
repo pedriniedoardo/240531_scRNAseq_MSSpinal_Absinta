@@ -67,6 +67,9 @@ pathways <- split(x = kegg_gene_sets$gene_symbol, f = kegg_gene_sets$gs_name)
 # head(pathways)
 
 # RUN GSEA ----------------------------------------------------------------
+# add a seed to fix the GSEA result
+set.seed(123)
+
 df_tables_GSEA_all <- lapply(list_ranks, function(x){
   fgsea(pathways, x, minSize=10, maxSize=500)  
 }) %>%

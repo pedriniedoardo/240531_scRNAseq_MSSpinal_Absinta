@@ -54,6 +54,9 @@ pathways <- split(x = kegg_gene_sets$gene_symbol, f = kegg_gene_sets$gs_name)
 # head(pathways)
 
 # RUN GSEA ----------------------------------------------------------------
+# add a seed to fix the GSEA result
+set.seed(123)
+
 df_tables_GSEA_all <- lapply(list_ranks, function(x){
   fgsea(pathways, x, minSize=10, maxSize=500)  
 }) %>%
@@ -124,10 +127,10 @@ test <- df_tables_GSEA_all_non_redundant %>%
 library(ggrepel)
 df_tables_GSEA_all_non_redundant %>%
   # shorten the label of the pathway
-  mutate(pathway2 = str_remove(pathway,pattern = "KEGG_") %>%
+  mutate(pathway2 = str_remove(pathway,pattern = "KEGG_MEDICUS") %>%
            str_sub(start = 1,end = 35)) %>%
   # mutate(min_log10_padj = -log10(padj)) %>%
-  ggplot(aes(y = -log10(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
+  ggplot(aes(y = -log(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
   theme(strip.background = element_blank())+
   geom_text_repel(size = 2,box.padding = 0.5,segment.alpha = 0.6,max.overlaps = 10)+
   geom_hline(yintercept = -log(0.05),col="gray",linetype="dashed")
@@ -136,10 +139,10 @@ ggsave(paste0("../../out/plot/analysis_R44/32_GSEA_unbiased_KEGG_nonredundant_ra
 # library(ggrepel)
 df_tables_GSEA_all %>%
   # shorten the label of the pathway
-  mutate(pathway2 = str_remove(pathway,pattern = "KEGG_") %>%
+  mutate(pathway2 = str_remove(pathway,pattern = "KEGG_MEDICUS") %>%
            str_sub(start = 1,end = 35)) %>%
   # mutate(min_log10_padj = -log10(padj)) %>%
-  ggplot(aes(y = -log10(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
+  ggplot(aes(y = -log(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
   theme(strip.background = element_blank())+
   geom_text_repel(size = 2,box.padding = 0.5,segment.alpha = 0.6,max.overlaps = 10)+
   geom_hline(yintercept = -log(0.05),col="gray",linetype="dashed")

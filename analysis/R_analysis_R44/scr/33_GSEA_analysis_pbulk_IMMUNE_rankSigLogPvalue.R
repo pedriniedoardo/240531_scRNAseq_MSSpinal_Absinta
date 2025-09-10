@@ -85,11 +85,15 @@ list_pathways <- lapply(list_gene_sets, function(x){
 # loop the process in the pathway list
 # name_anno <- names(list_pathways[1])
 # pathways <- list_pathways[[1]]
+
 pmap(list(names(list_pathways),list_pathways),function(name_anno,pathways){
   # track the progress
   print(name_anno)
   
   # run the enrichment
+  # add a seed to fix the GSEA result
+  set.seed(123)
+  
   df_tables_GSEA_all <- lapply(list_ranks, function(x){
     fgsea(pathways, x, minSize=10, maxSize=500)  
   }) %>%
@@ -159,7 +163,7 @@ pmap(list(names(list_pathways),list_pathways),function(name_anno,pathways){
     mutate(pathway2 = str_remove(pathway,pattern = paste0(name_anno,"_")) %>%
              str_sub(start = 1,end = 35)) %>%
     # mutate(min_log10_padj = -log10(padj)) %>%
-    ggplot(aes(y = -log10(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
+    ggplot(aes(y = -log(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
     theme(strip.background = element_blank())+
     geom_text_repel(size = 2,box.padding = 0.5,segment.alpha = 0.6,max.overlaps = 10)+
     geom_hline(yintercept = -log(0.05),col="gray",linetype="dashed")
@@ -171,67 +175,167 @@ pmap(list(names(list_pathways),list_pathways),function(name_anno,pathways){
     mutate(pathway2 = str_remove(pathway,pattern = paste0(name_anno,"_")) %>%
              str_sub(start = 1,end = 35)) %>%
     # mutate(min_log10_padj = -log10(padj)) %>%
-    ggplot(aes(y = -log10(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
+    ggplot(aes(y = -log(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
     theme(strip.background = element_blank())+
     geom_text_repel(size = 2,box.padding = 0.5,segment.alpha = 0.6,max.overlaps = 10)+
     geom_hline(yintercept = -log(0.05),col="gray",linetype="dashed")
   ggsave(paste0("../../out/plot/analysis_R44/33_GSEA_unbiased_",name_anno,"_rankSigLogPval_","IMMUNE",".pdf"),width = 15,height = 9)
 })
 
+# merge all the individual tables in one
+df_GSEA_rankPvalue_all <- lapply(names(list_pathways),function(x){
+  # check the progress
+  print(x)
+  
+  # read in the table
+  df_tables_GSEA <- read_tsv(paste0("../../out/table/analysis_R44/33_df_table_GSEA_",x,"_rankSigLogPval_","IMMUNE",".tsv")) %>%
+    mutate(annotation = x)
+  
+  return(df_tables_GSEA)
+}) %>%
+  bind_rows()
+
+df_GSEA_rankPvalue_all %>%
+  write_tsv("../../out/table/analysis_R44/33_df_table_GSEA_all_rankSigLogPval_IMMUNE.tsv")
+
 # compare the two results from the two ranking systems --------------------
-#
-df_tables_GSEA_rankPvalue <- read_tsv(paste0("../../out/table/analysis_R44/32_df_table_GSEA_KEGG_rankSigLogPval_","IMMUNE",".tsv")) %>%
-  dplyr::select(dataset,pathway,NES,padj)
 
-df_tables_GSEA_rankLogFC <- read_tsv(paste0("../../out/table/analysis_R44/32_df_table_GSEA_KEGG_ranklogfc_","IMMUNE",".tsv")) %>%
-  dplyr::select(dataset,pathway,NES,padj)
+# read all the terms from the different annotaitons
+df_GSEA_rankPvalue <- lapply(names(list_pathways),function(x){
+  # check the progress
+  print(x)
+  
+  # read in the table
+  df_tables_GSEA_rankPvalue <- read_tsv(paste0("../../out/table/analysis_R44/33_df_table_GSEA_",x,"_rankSigLogPval_","IMMUNE",".tsv")) %>%
+    dplyr::select(dataset,pathway,NES,padj) %>%
+    mutate(annotation = x)
+  
+  return(df_tables_GSEA_rankPvalue)
+}) %>%
+  bind_rows()
 
+df_GSEA_rankLogFC <- lapply(names(list_pathways),function(x){
+  # check the progress
+  print(x)
+  
+  # read in the table
+  df_tables_GSEA_rankLogFC <- read_tsv(paste0("../../out/table/analysis_R44/33_df_table_GSEA_",x,"_ranklogfc_","IMMUNE",".tsv")) %>%
+    dplyr::select(dataset,pathway,NES,padj) %>%
+    mutate(annotation = x)
+  
+  return(df_tables_GSEA_rankLogFC)
+}) %>%
+  bind_rows()
 
-test <- df_tables_GSEA_rankPvalue %>%
-  left_join(df_tables_GSEA_rankLogFC,by = c("dataset","pathway"),suffix = c(".pvalue",".logfc"))
+# join the two tables
+test <-  df_GSEA_rankPvalue %>%
+  left_join(df_GSEA_rankLogFC,by = c("annotation","dataset","pathway"),suffix = c(".pvalue",".logfc"))
 
+# plot the comparison for the two ranking systems
 test %>%  
-  ggplot(aes(x=NES.pvalue, y = NES.logfc)) + geom_point() + theme_bw()
+  ggplot(aes(x=NES.pvalue, y = NES.logfc)) + geom_point(shape = 1) + theme_bw() + facet_wrap(~annotation) + theme(strip.background = element_blank())
 
-global_min <- min(-log(c(test %>%
-                           slice_max(abs(NES.logfc),n = 10) %>%
-                           pull(padj.logfc),
-                         test %>%
-                           slice_max(abs(NES.pvalue),n = 10) %>%
-                           pull(padj.pvalue))))
-global_max <- max(-log(c(test %>%
-                           slice_max(abs(NES.logfc),n = 10) %>%
-                           pull(padj.logfc),
-                         test %>%
-                           slice_max(abs(NES.pvalue),n = 10) %>%
-                           pull(padj.pvalue))))
+# 
 
-p1 <- test %>%
-  slice_max(abs(NES.pvalue),n = 10) %>%
-  mutate(Term = str_remove_all(pathway,pattern = "KEGG_MEDICUS_") %>% str_sub(start = 1,end = 50)) %>%
-  mutate(Term = fct_reorder(Term, NES.pvalue,.desc = F)) %>%
-  mutate(direction = factor(sign(NES.pvalue),labels = c(1,-1),levels = c(1,-1))) %>%
-  ggplot(aes(x = NES.pvalue,y=Term)) + 
-  geom_point(aes(size = -log(padj.pvalue),col=direction)) +
-  theme_bw() +
-  geom_vline(xintercept = 0,col="gray",linetype = "dashed") +
-  scale_color_manual(values = c("red","blue")) +
-  scale_size_continuous(limits = c(global_min, global_max)) +
-  coord_cartesian(xlim = c(-3,3)) + 
-  ggtitle("signed log pvalue ranking")
+# arrange the plot for the top terms in GSEA
+# anno<-"CP"
+list_plot <- lapply(names(list_pathways),function(anno){
+  # check the progress
+  print(anno)
+  
+  # pull the range of the NES to scale the dots
+  global_min <- min(-log(c(test %>%
+                             filter(annotation %in% anno) %>%
+                             slice_max(abs(NES.logfc),n = 10) %>%
+                             pull(padj.logfc),
+                           test %>%
+                             filter(annotation %in% anno) %>%
+                             slice_max(abs(NES.pvalue),n = 10) %>%
+                             pull(padj.pvalue))))
+  global_max <- max(-log(c(test %>%
+                             filter(annotation %in% anno) %>%
+                             slice_max(abs(NES.logfc),n = 10) %>%
+                             pull(padj.logfc),
+                           test %>%
+                             filter(annotation %in% anno) %>%
+                             slice_max(abs(NES.pvalue),n = 10) %>%
+                             pull(padj.pvalue))))
+  
+  p1 <- test %>%
+    filter(annotation %in% anno) %>%
+    slice_max(abs(NES.pvalue),n = 10) %>%
+    # mutate(Term = str_remove_all(pathway,pattern = "KEGG_MEDICUS_") %>% str_sub(start = 1,end = 50)) %>%
+    mutate(Term = str_remove_all(pathway,pattern = paste0(anno,"_")) %>% str_sub(start = 1,end = 50)) %>%
+    mutate(Term = fct_reorder(Term, NES.pvalue,.desc = F)) %>%
+    mutate(direction = factor(sign(NES.pvalue),labels = c(1,-1),levels = c(1,-1))) %>%
+    ggplot(aes(x = NES.pvalue,y=Term)) + 
+    geom_point(aes(size = -log(padj.pvalue),col=direction)) +
+    theme_bw() +
+    geom_vline(xintercept = 0,col="gray",linetype = "dashed") +
+    scale_color_manual(values = c("red","blue")) +
+    scale_size_continuous(limits = c(global_min, global_max)) +
+    coord_cartesian(xlim = c(-3,3)) + 
+    ggtitle(paste0("GSEA ", anno," signed NegLogPval ranking"))
+  
+  p2 <- test %>%
+    filter(annotation %in% anno) %>%
+    slice_max(abs(NES.logfc),n = 10) %>%
+    # mutate(Term = str_remove_all(pathway,pattern = "KEGG_MEDICUS_") %>% str_sub(start = 1,end = 50)) %>%
+    mutate(Term = str_remove_all(pathway,pattern = paste0(anno,"_")) %>% str_sub(start = 1,end = 50)) %>%
+    mutate(Term = fct_reorder(Term, NES.logfc,.desc = F)) %>%
+    mutate(direction = factor(sign(NES.logfc),labels = c(1,-1),levels = c(1,-1))) %>%
+    ggplot(aes(x = NES.logfc,y=Term)) + 
+    geom_point(aes(size = -log(padj.logfc),col=direction)) +
+    theme_bw() +
+    geom_vline(xintercept = 0,col="gray",linetype = "dashed") +
+    scale_color_manual(values = c("red","blue")) +
+    scale_size_continuous(limits = c(global_min, global_max)) +
+    coord_cartesian(xlim = c(-3,3)) + 
+    ggtitle(paste0("GSEA ", anno," logFC ranking"))
+  
+  # arrange the plot
+  # p_tot <- (p1 / p2) + plot_annotation(
+  #   title = paste0("GSEA_", anno), 
+  #   theme = theme(plot.title = element_text(hjust = 0.5))
+  # )
+  
+  p_tot <- (p1 / p2)
+  
+  return(p_tot)
+})
 
-p2 <- test %>%
-  slice_max(abs(NES.logfc),n = 10) %>%
-  mutate(Term = str_remove_all(pathway,pattern = "KEGG_MEDICUS_") %>% str_sub(start = 1,end = 50)) %>%
-  mutate(Term = fct_reorder(Term, NES.logfc,.desc = F)) %>%
-  mutate(direction = factor(sign(NES.pvalue),labels = c(1,-1),levels = c(1,-1))) %>%
-  ggplot(aes(x = NES.logfc,y=Term)) + 
-  geom_point(aes(size = -log(padj.logfc),col=direction)) +
-  theme_bw() +
-  geom_vline(xintercept = 0,col="gray",linetype = "dashed") +
-  scale_color_manual(values = c("red","blue")) +
-  scale_size_continuous(limits = c(global_min, global_max)) +
-  coord_cartesian(xlim = c(-3,3)) + 
-  ggtitle("logFC ranking")
+#
+wrap_plots(list_plot,nrow = 1)
+ggsave("../../out/plot/analysis_R44/33_GSEA_top10_all.pdf",width = 40,height = 10)
 
-p1 / p2
+# focus on interferon response
+read_tsv(paste0("../../out/table/analysis_R44/33_df_table_GSEA_HALLMARK_rankSigLogPval_IMMUNE.tsv")) %>%
+  filter(str_detect(pathway,pattern = "INTERFERON_ALPHA_RESPONSE")) %>%
+  pull(leadingEdge) %>%
+  str_split(pattern = "\\|") %>%
+  unlist() %>%
+  saveRDS("../../out/object/33_leadingEges_HALLMARK_INTERFERON_ALPHA_RESPONSE_rankSigLogPval.rds")
+  
+# plot volcano like plot for all the annoations together
+
+test %>%
+  # shorten the label of the pathway
+  mutate(pathway2 = str_remove(pathway,pattern = paste0(paste0(names(list_pathways),collapse = "|"),"_")) %>%
+           str_sub(start = 1,end = 50)) %>%
+  # mutate(min_log10_padj = -log10(padj)) %>%
+  ggplot(aes(y = -log(padj.pvalue),x = NES.pvalue,label = pathway2)) + geom_point(alpha = 0.2) + facet_wrap(~annotation) + theme_bw() +
+  theme(strip.background = element_blank())+
+  geom_text_repel(size = 2,box.padding = 0.5,segment.alpha = 0.6,max.overlaps = 10)+
+  geom_hline(yintercept = -log(0.05),col="gray",linetype="dashed")
+ggsave("../../out/plot/analysis_R44/33_GSEA_volcano_rankSigLogPval_all.pdf",width = 30,height = 20)
+
+test %>%
+  # shorten the label of the pathway
+  mutate(pathway2 = str_remove(pathway,pattern = paste0(paste0(names(list_pathways),collapse = "|"),"_")) %>%
+           str_sub(start = 1,end = 50)) %>%
+  # mutate(min_log10_padj = -log10(padj)) %>%
+  ggplot(aes(y = -log(padj.logfc),x = NES.logfc,label = pathway2)) + geom_point(alpha = 0.2) + facet_wrap(~annotation) + theme_bw() +
+  theme(strip.background = element_blank())+
+  geom_text_repel(size = 2,box.padding = 0.5,segment.alpha = 0.6,max.overlaps = 10)+
+  geom_hline(yintercept = -log(0.05),col="gray",linetype="dashed")
+ggsave("../../out/plot/analysis_R44/33_GSEA_volcano_rankLogFC_all.pdf",width = 30,height = 20)

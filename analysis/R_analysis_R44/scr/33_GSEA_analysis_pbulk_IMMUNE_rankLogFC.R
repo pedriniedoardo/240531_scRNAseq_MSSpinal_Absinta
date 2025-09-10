@@ -73,6 +73,7 @@ list_pathways <- lapply(list_gene_sets, function(x){
 
 # RUN GSEA ----------------------------------------------------------------
 # loop the process in the pathway list
+
 # name_anno <- names(list_pathways[1])
 # pathways <- list_pathways[[1]]
 pmap(list(names(list_pathways),list_pathways),function(name_anno,pathways){
@@ -80,6 +81,9 @@ pmap(list(names(list_pathways),list_pathways),function(name_anno,pathways){
   print(name_anno)
   
   # run the enrichment
+  # add a seed to fix the GSEA result
+  set.seed(123)
+  
   df_tables_GSEA_all <- lapply(list_ranks, function(x){
     fgsea(pathways, x, minSize=10, maxSize=500)  
   }) %>%
@@ -136,7 +140,7 @@ pmap(list(names(list_pathways),list_pathways),function(name_anno,pathways){
   
   # save the table
   df_tables_GSEA_all_non_redundant %>%
-    write_tsv(file = paste0("../../out/table/analysis_R44/33_df_table_GSEA_",name_anno,"_nonredundant_ranklogf_","IMMUNE",".tsv"))
+    write_tsv(file = paste0("../../out/table/analysis_R44/33_df_table_GSEA_",name_anno,"_nonredundant_ranklogfc_","IMMUNE",".tsv"))
   
   test <- df_tables_GSEA_all_non_redundant %>%
     group_by(dataset) %>%
@@ -149,7 +153,7 @@ pmap(list(names(list_pathways),list_pathways),function(name_anno,pathways){
     mutate(pathway2 = str_remove(pathway,pattern = paste0(name_anno,"_")) %>%
              str_sub(start = 1,end = 35)) %>%
     # mutate(min_log10_padj = -log10(padj)) %>%
-    ggplot(aes(y = -log10(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
+    ggplot(aes(y = -log(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
     theme(strip.background = element_blank())+
     geom_text_repel(size = 2,box.padding = 0.5,segment.alpha = 0.6,max.overlaps = 10)+
     geom_hline(yintercept = -log(0.05),col="gray",linetype="dashed")
@@ -161,9 +165,25 @@ pmap(list(names(list_pathways),list_pathways),function(name_anno,pathways){
     mutate(pathway2 = str_remove(pathway,pattern = paste0(name_anno,"_")) %>%
              str_sub(start = 1,end = 35)) %>%
     # mutate(min_log10_padj = -log10(padj)) %>%
-    ggplot(aes(y = -log10(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
+    ggplot(aes(y = -log(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
     theme(strip.background = element_blank())+
     geom_text_repel(size = 2,box.padding = 0.5,segment.alpha = 0.6,max.overlaps = 10)+
     geom_hline(yintercept = -log(0.05),col="gray",linetype="dashed")
   ggsave(paste0("../../out/plot/analysis_R44/33_GSEA_unbiased_",name_anno,"_ranklogfc_","IMMUNE",".pdf"),width = 15,height = 9)
 })
+
+# merge all the individual tables in one
+df_GSEA_ranklogFC_all <- lapply(names(list_pathways),function(x){
+  # check the progress
+  print(x)
+  
+  # read in the table
+  df_tables_GSEA <- read_tsv(paste0("../../out/table/analysis_R44/33_df_table_GSEA_",x,"_ranklogfc_","IMMUNE",".tsv")) %>%
+    mutate(annotation = x)
+  
+  return(df_tables_GSEA)
+}) %>%
+  bind_rows()
+
+df_GSEA_ranklogFC_all %>%
+  write_tsv("../../out/table/analysis_R44/33_df_table_GSEA_all_rankLogFC_IMMUNE.tsv")
