@@ -49,7 +49,6 @@ list_ranks <- lapply(results, function(x){
 }) 
 glimpse(list_ranks)
 
-
 # score all the signatures in MsigDB from C2 category ---------------------
 # library("msigdbr")
 msigdbr_collections()
@@ -140,7 +139,7 @@ test <- df_tables_GSEA_all_non_redundant %>%
 library(ggrepel)
 df_tables_GSEA_all_non_redundant %>%
   # shorten the label of the pathway
-  mutate(pathway2 = str_remove(pathway,pattern = "KEGG_") %>%
+  mutate(pathway2 = str_remove(pathway,pattern = "KEGG_MEDICUS_") %>%
            str_sub(start = 1,end = 35)) %>%
   # mutate(min_log10_padj = -log10(padj)) %>%
   ggplot(aes(y = -log(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
@@ -152,7 +151,7 @@ ggsave(paste0("../../out/plot/analysis_R44/32_GSEA_unbiased_KEGG_nonredundant_ra
 # library(ggrepel)
 df_tables_GSEA_all %>%
   # shorten the label of the pathway
-  mutate(pathway2 = str_remove(pathway,pattern = "KEGG_") %>%
+  mutate(pathway2 = str_remove(pathway,pattern = "KEGG_MEDICUS_") %>%
            str_sub(start = 1,end = 35)) %>%
   # mutate(min_log10_padj = -log10(padj)) %>%
   ggplot(aes(y = -log(padj),x = NES,label = pathway2)) + geom_point(aes(size = size),alpha = 0.2) + facet_wrap(~dataset) + theme_bw() +
@@ -185,7 +184,7 @@ df_tables_GSEA_rankLogFC <- read_tsv(paste0("../../out/table/analysis_R44/32_df_
 
 
 test <- df_tables_GSEA_rankPvalue %>%
-  left_join(df_tables_GSEA_rankLogFC,by = c("dataset","pathway"),suffix = c(".pvalue",".logfc"))
+  full_join(df_tables_GSEA_rankLogFC,by = c("dataset","pathway"),suffix = c(".pvalue",".logfc"))
 
 test %>%  
   ggplot(aes(x=NES.pvalue, y = NES.logfc)) + geom_point() + theme_bw()

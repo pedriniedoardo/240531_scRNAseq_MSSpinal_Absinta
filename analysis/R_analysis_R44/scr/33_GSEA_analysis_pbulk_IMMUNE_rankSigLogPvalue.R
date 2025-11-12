@@ -229,7 +229,7 @@ df_GSEA_rankLogFC <- lapply(names(list_pathways),function(x){
 
 # join the two tables
 test <-  df_GSEA_rankPvalue %>%
-  left_join(df_GSEA_rankLogFC,by = c("annotation","dataset","pathway"),suffix = c(".pvalue",".logfc"))
+  full_join(df_GSEA_rankLogFC,by = c("annotation","dataset","pathway"),suffix = c(".pvalue",".logfc"))
 
 # plot the comparison for the two ranking systems
 test %>%  
