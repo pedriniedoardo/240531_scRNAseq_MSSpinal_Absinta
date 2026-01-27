@@ -255,4 +255,4 @@ df_average_treat2 %>%
   theme_bw() +
   facet_wrap(~gene,scales="free",nrow = 1)+
   theme(strip.background = element_blank(),axis.text.x = element_text(angle = 90,hjust = 1))
-ggsave("../../out/plot/analysis_R44/30_DE_sc_GOI02_treat_02.pdf",width = 11,height = 3)
+ggsave("../../out/plot/analysis_R44/30_DE_sc_GOI02_treat_02.pdf",width = 15,height = 4)
