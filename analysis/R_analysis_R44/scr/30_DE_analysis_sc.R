@@ -176,6 +176,21 @@ df_average_treat %>%
   theme(strip.background = element_blank(),axis.text.x = element_text(angle = 90,hjust = 1))
 ggsave("../../out/plot/analysis_R44/30_DE_sc_GOI01_treat.pdf",width = 8,height = 4)
 
+# try to plot the panel facetting by cell_id in order to rescale the range
+df_average_treat %>%
+  mutate(cellid = str_extract_all(group_id,pattern = pattern_cellid) %>% unlist()) %>%
+  mutate(sample = str_extract_all(group_id,pattern = pattern_sample) %>% unlist()) %>%
+  mutate(treat = str_extract_all(group_id,pattern = pattern_treat) %>% unlist()) %>%
+  # group_by(RNA_snn_res.0.1) %>%
+  # mutate(group_avg = mean(avg_exp)) %>%
+  # ungroup() %>%
+  # mutate(RNA_snn_res.0.1 = fct_reorder(RNA_snn_res.0.1,group_avg,.desc = T)) %>%
+  ggplot(aes(x = treat,y=avg_exp)) + geom_boxplot(outlier.shape = NA) + geom_point(position = position_jitter(width = 0.2),shape = 1)+
+  theme_bw() +
+  facet_wrap(cellid~gene,scales="free")+
+  theme(strip.background = element_blank(),axis.text.x = element_text(angle = 90,hjust = 1))
+ggsave("../../out/plot/analysis_R44/30_DE_sc_GOI01_treat_01.pdf",width = 9,height = 8)
+
 # try to color by treat rather than splitting
 df_average_treat %>%
   mutate(cellid = str_extract_all(group_id,pattern = pattern_cellid) %>% unlist()) %>%
@@ -201,4 +216,43 @@ df_average_treat %>%
   lm(data = .,avg_exp~cellid+treat) %>%
   summary()
 
+# -------------------------------------------------------------------------
+# Aletta suggested to also explore a panel of known markers of B cells to see if they have a trend in MS
+GOIs <- c("CD38","IGKC","IGHG1","MZB1","CD79A")
 
+df_average_treat2 <- AverageExpression(data.combined,features = GOIs)$RNA %>%
+  as.data.frame() %>%
+  rownames_to_column("gene") %>%
+  pivot_longer(names_to = "group_id",values_to = "avg_exp",-gene)
+
+# try to plot the panel facetting by cell_id in order to rescale the range
+df_average_treat2 %>%
+  mutate(cellid = str_extract_all(group_id,pattern = pattern_cellid) %>% unlist()) %>%
+  mutate(sample = str_extract_all(group_id,pattern = pattern_sample) %>% unlist()) %>%
+  mutate(treat = str_extract_all(group_id,pattern = pattern_treat) %>% unlist()) %>%
+  # group_by(RNA_snn_res.0.1) %>%
+  # mutate(group_avg = mean(avg_exp)) %>%
+  # ungroup() %>%
+  # mutate(RNA_snn_res.0.1 = fct_reorder(RNA_snn_res.0.1,group_avg,.desc = T)) %>%
+  ggplot(aes(x = treat,y=avg_exp)) + geom_boxplot(outlier.shape = NA) + geom_point(position = position_jitter(width = 0.2),shape = 1)+
+  theme_bw() +
+  facet_wrap(cellid~gene,scales="free",ncol=5)+
+  theme(strip.background = element_blank(),axis.text.x = element_text(angle = 90,hjust = 1))
+ggsave("../../out/plot/analysis_R44/30_DE_sc_GOI02_treat_01.pdf",width = 10,height = 22)
+
+# try to color by treat rather than splitting
+df_average_treat2 %>%
+  mutate(cellid = str_extract_all(group_id,pattern = pattern_cellid) %>% unlist()) %>%
+  mutate(sample = str_extract_all(group_id,pattern = pattern_sample) %>% unlist()) %>%
+  mutate(treat = str_extract_all(group_id,pattern = pattern_treat) %>% unlist()) %>%
+  # group_by(RNA_snn_res.0.1) %>%
+  # mutate(group_avg = mean(avg_exp)) %>%
+  # ungroup() %>%
+  # mutate(RNA_snn_res.0.1 = fct_reorder(RNA_snn_res.0.1,group_avg,.desc = T)) %>%
+  ggplot(aes(x = cellid,y=avg_exp,col=treat)) +
+  geom_boxplot(outlier.shape = NA) +
+  geom_point(position = position_jitterdodge(jitter.width = 0.2,dodge.width = 0.8),shape = 1)+
+  theme_bw() +
+  facet_wrap(~gene,scales="free",nrow = 1)+
+  theme(strip.background = element_blank(),axis.text.x = element_text(angle = 90,hjust = 1))
+ggsave("../../out/plot/analysis_R44/30_DE_sc_GOI02_treat_02.pdf",width = 11,height = 3)
