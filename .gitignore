@@ -8,6 +8,7 @@ data/
 .RData
 .Rproj.user
 .Ruserdata
+session.txt
 
 # Other repository to ignore  
 logs_slurm/ 
