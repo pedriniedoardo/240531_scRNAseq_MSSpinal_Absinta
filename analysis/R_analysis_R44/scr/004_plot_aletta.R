@@ -41,3 +41,32 @@ test_long01 <- DotPlot(sobj_update,
   labs(title = "cell_id")+
   theme(strip.text = element_text(angle = 90))
 ggsave(plot=test_long01,"../../out/plot/analysis_R44/004_DotplotLong_cellid.pdf",width = 30,height = 6)
+
+# aletta suggested using another panel of marker genes
+
+shortlist_features_list_long2 <- list(
+  Active_MG = c("HLA-DRA", "CD74", "TREM2"),
+  Astro = c("AQP4", "SLC1A2", "ALDH1L1", "GFAP", "S100B"),
+  B_cells = c("MS4A1", "CD79A", "CD79B", "CD38", "IGHG1"),
+  Endo = c("CLDN5", "PECAM1", "VWF", "FLT1", "KDR"),
+  Ependymam = c("FOXJ1", "CFAP299", "DNAH9", "RSPH1"),
+  Macro = c("LYVE1", "CD163", "MRC1"),
+  MG = c("P2RY12", "TMEM119", "CX3CR1", "ADGRG1", "CSF1", "TYROBP", "AIF1", "C1QA", "C1QB"),
+  Neu = c("SNAP25", "RBFOX3", "SYT1", "STX1A", "NEFL"),
+  Oligo = c("PLP1", "MOG", "MBP", "MAG", "MOBP"),
+  OPC = c("PDGFRA", "CSPG4", "PTPRZ1", "OLIG1", "SOX10"),
+  Peri = c("PDGFRB", "RGS5", "ACTA2"),
+  Schwann = c("MPZ", "PMP22", "PRX"),
+  Stromal = c("COL1A1", "DCN", "LAMA2"),
+  T_cells = c("CD3D", "CD3E", "CD2", "CD8A", "SKAP1", "TRBC1")
+  )
+
+test_long02 <- DotPlot(sobj_update,
+                       features = shortlist_features_list_long2,
+                       dot.scale = 8,
+                       cluster.idents = T,
+                       group.by = "cell_id") +
+  RotatedAxis() +
+  labs(title = "cell_id")+
+  theme(strip.text = element_text(angle = 90))
+ggsave(plot=test_long02,"../../out/plot/analysis_R44/004_DotplotLong_cellid_panelAletta.pdf",width = 30,height = 6)
