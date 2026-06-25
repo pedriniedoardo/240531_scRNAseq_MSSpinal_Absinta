@@ -5,6 +5,7 @@
 library(Seurat)
 library(tidyverse)
 library(patchwork)
+library(ggalluvial)
 
 # read in the data --------------------------------------------------------
 # read in the object
@@ -70,3 +71,77 @@ test_long02 <- DotPlot(sobj_update,
   labs(title = "cell_id")+
   theme(strip.text = element_text(angle = 90))
 ggsave(plot=test_long02,"../../out/plot/analysis_R44/004_DotplotLong_cellid_panelAletta.pdf",width = 30,height = 6)
+
+# alluvian plot -----------------------------------------------------------
+# Aletta suggested including an alluvian plot to show how the proportion of the different cell types shift across locations
+
+# pull the metadata from the object
+df_meta <- sobj_update@meta.data
+
+# generate the plot
+df_summary <- df_meta %>%
+  group_by(sample_id,location,diagnosis_short,pathological_stage_short,cell_id) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  group_by(sample_id) %>%
+  mutate(tot = sum(n)) %>%
+  ungroup() %>%
+  mutate(prop = n/tot) %>%
+  mutate(pathology_location = paste0(pathological_stage_short,"_",location)) %>%
+  mutate(pathology_location = factor(pathology_location,levels = c("CTRL_cervical","CTRL_thoracic","CTRL_lumbar","IN_cervical","IN_thoracic","IN_lumbar","ACT_cervical","ACT_thoracic","ACT_lumbar")))
+# save the table
+df_summary %>%
+  write_tsv("../../out/table/analysis_R44/004_table_summary_aletta.tsv")
+
+# attempt generic plot per sample
+# df_summary %>%
+#   ggplot(aes(x = sample_id, y = prop, fill = cell_id)) + 
+#   geom_col(position = "stack") +
+#   facet_wrap(~ pathology_location, scales = "free_x",nrow=1) +  # Drops samples not in that location
+#   theme_minimal() +
+#   theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+#   labs(x = "Sample ID", y = "Proportion", fill = "Cell ID")
+
+p03 <- df_summary %>%
+  ggplot(aes(x = sample_id, y = prop, fill = cell_id)) +
+  geom_col() + # default is position = "stack"
+  facet_grid(. ~ pathology_location, scales = "free_x", space = "free_x") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1),
+        strip.text = element_text(angle = 90),
+        panel.grid = element_blank())
+ggsave(plot=p03,"../../out/plot/analysis_R44/004_porpCellID_cellid_panelAletta.pdf",width = 15,height = 6)
+
+# generate the plot simplify the aaggreagtionk
+df_summary2 <- df_meta %>%
+  group_by(location,diagnosis_short,pathological_stage_short,cell_id) %>%
+  summarise(n = n()) %>%
+  ungroup() %>%
+  group_by(location,diagnosis_short,pathological_stage_short) %>%
+  mutate(tot = sum(n)) %>%
+  ungroup() %>%
+  mutate(prop = n/tot) %>%
+  mutate(pathology_location = paste0(pathological_stage_short,"_",location)) %>%
+  mutate(pathology_location = factor(pathology_location,levels = c("CTRL_cervical","CTRL_thoracic","CTRL_lumbar","IN_cervical","IN_thoracic","IN_lumbar","ACT_cervical","ACT_thoracic","ACT_lumbar")))
+# save the table
+df_summary2 %>%
+  write_tsv("../../out/table/analysis_R44/004_table_summary_aletta2.tsv")
+
+# attempt generic plot per sample
+# df_summary %>%
+#   ggplot(aes(x = sample_id, y = prop, fill = cell_id)) + 
+#   geom_col(position = "stack") +
+#   facet_wrap(~ pathology_location, scales = "free_x",nrow=1) +  # Drops samples not in that location
+#   theme_minimal() +
+#   theme(axis.text.x = element_text(angle = 45,hjust = 1)) +
+#   labs(x = "Sample ID", y = "Proportion", fill = "Cell ID")
+
+p04 <- df_summary2 %>%
+  ggplot(aes(x = pathological_stage_short, y = prop, fill = cell_id)) +
+  geom_col() + # default is position = "stack"
+  facet_grid(. ~ location, scales = "free_x", space = "free_x") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45,hjust = 1),
+        strip.text = element_text(angle = 90),
+        panel.grid = element_blank())
+ggsave(plot=p04,"../../out/plot/analysis_R44/004_porpCellID_cellid_panelAletta2.pdf",width = 10,height = 6)
