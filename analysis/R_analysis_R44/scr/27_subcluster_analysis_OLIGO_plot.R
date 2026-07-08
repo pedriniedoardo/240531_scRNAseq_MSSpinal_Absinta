@@ -330,6 +330,31 @@ DimPlot(data.combined, reduction = "umap",group.by = "RNA_snn_res.0.4",split.by 
 ggsave("../../out/plot/analysis_R44/27_UMAPCluster_splitDisease_res0.4_OLIGO_subcluster.pdf",width = 8,height = 4)
 # DimPlot(data.combined, reduction = "umap", split.by = "origin",label = T,raster = T,ncol=5)
 
+
+# -------------------------------------------------------------------------
+
+
+# Aletta suggested using the following panel to identity the OLIGO
+shortlist_features_aletta <- list(
+  custom_aletta = c("PDGFRA", "CSPG4", "GPR17", "BCAS1", "OLIG2", "SOX10", "MYRF", "PLP1", "MBP", "MOBP", "MAG", "MOG", "OPALIN", "TPPP", "CNP", "GFAP", "DPP10")
+  # ASTRO = c("AQP4","GFAP","CD44","AQP1","VIM","APOE","VCAN","STAT3","ABCA1","TNC","SDC4","SLC1A2","S100B"),
+  # NEURONS = c("GAD2","PVALB","SV2C","VIP","TLE4","CUX2","THY1","SLC17A7","NRGN","SATB2","RORB","SST","STX1A","STX1B","SYP","TH","NEFL","SYT1")
+  )
+
+test_long_test <- DotPlot(data.combined,
+                       features = shortlist_features_aletta,
+                       dot.scale = 8,
+                       cluster.idents = T,
+                       group.by = "RNA_snn_res.0.4") +
+  RotatedAxis() +
+  labs(title = "RNA_snn_res.0.4")+
+  theme(strip.text = element_text(angle = 90))
+
+ggsave(plot=test_long_test,"../../out/plot/analysis_R44/27_DotplotAletta_res0.4_OLIGO_subcluster.pdf",width = 10,height = 6)
+
+# -------------------------------------------------------------------------
+
+
 # plot the shortlisted feature per cluster
 # notice that this is done only on the subset of the young (control) cells
 test_long01 <- DotPlot(data.combined,
@@ -341,6 +366,7 @@ test_long01 <- DotPlot(data.combined,
   labs(title = "RNA_snn_res.0.4")+
   theme(strip.text = element_text(angle = 90))
 ggsave(plot=test_long01,"../../out/plot/analysis_R44/27_DotplotLong_res0.4_OLIGO_subcluster.pdf",width = 30,height = 6)
+
 
 # same as above but as violin plot
 list_plot <- lapply(df_rename_long$rename, function(x){ 
