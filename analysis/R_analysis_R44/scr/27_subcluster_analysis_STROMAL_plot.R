@@ -18,8 +18,8 @@ library(patchwork)
 library(ComplexHeatmap)
 
 # read in the data --------------------------------------------------------
-data.combined <- readRDS("../../out/object/analysis_R44/27_OPC_subcluster_HarmonySample.rds")
-# data.combined2 <- readRDS("../../out/object/100_OPC_subcluster_HarmonyRun.rds")
+data.combined <- readRDS("../../out/object/analysis_R44/27_STROMAL_subcluster_HarmonySample.rds")
+# data.combined2 <- readRDS("../../out/object/100_STROMAL_subcluster_HarmonyRun.rds")
 
 (DimPlot(data.combined,group.by = "sample_id") + ggtitle("Harmony Sample"))
 
@@ -28,7 +28,7 @@ data.combined <- readRDS("../../out/object/analysis_R44/27_OPC_subcluster_Harmon
 # library(clustree)
 clustree::clustree(data.combined@meta.data[,grep("RNA_snn_res", colnames(data.combined@meta.data))],
                    prefix = "RNA_snn_res.")
-ggsave("../../out/plot/analysis_R44/27_UMAPCluster_tree_OPC_subcluster.pdf",width = 10,height = 10)
+ggsave("../../out/plot/analysis_R44/27_UMAPCluster_tree_STROMAL_subcluster.pdf",width = 10,height = 10)
 
 # general UMAP with former clustering
 
@@ -46,7 +46,7 @@ list_plot <- lapply(id_resolution,function(x){
 })
 
 wrap_plots(list_plot)
-ggsave("../../out/plot/analysis_R44/27_UMAPCluster_resolutions_OPC_subcluster.pdf",width = 25,height = 15)
+ggsave("../../out/plot/analysis_R44/27_UMAPCluster_resolutions_STROMAL_subcluster.pdf",width = 25,height = 15)
 
 # 
 shortlist_features_list_long <- list(
@@ -116,7 +116,7 @@ list_plot_02_short <- lapply(df_rename_short$rename,function(x){
 })
 
 wrap_plots(list_plot_02_short)
-ggsave("../../out/plot/analysis_R44/27_UMAPCluster_short_OPC_subcluster.pdf",width = 22,height = 12)
+ggsave("../../out/plot/analysis_R44/27_UMAPCluster_short_STROMAL_subcluster.pdf",width = 22,height = 12)
 
 list_plot_02_long <- lapply(df_rename_long$rename,function(x){
   plot <- FeaturePlot(data.combined,features = x,order = T,
@@ -126,16 +126,16 @@ list_plot_02_long <- lapply(df_rename_long$rename,function(x){
 })
 
 wrap_plots(list_plot_02_long)
-ggsave("../../out/plot/analysis_R44/27_UMAPCluster_long_OPC_subcluster.pdf",width = 22,height = 12)
+ggsave("../../out/plot/analysis_R44/27_UMAPCluster_long_STROMAL_subcluster.pdf",width = 22,height = 12)
 
 # res 0.1 -----------------------------------------------------------------
 # select a specific subset of resolutions
 # general UMAP with new clustering
 DimPlot(data.combined, reduction = "umap",group.by = "RNA_snn_res.0.1",label = T,raster = F)
-ggsave("../../out/plot/analysis_R44/27_UMAPCluster_res0.1_OPC_subcluster.pdf",width = 4,height = 3)
+ggsave("../../out/plot/analysis_R44/27_UMAPCluster_res0.1_STROMAL_subcluster.pdf",width = 6,height = 5)
 
 DimPlot(data.combined, reduction = "umap",group.by = "RNA_snn_res.0.1",split.by = "diagnosis_short",label = T,raster = F,ncol=4)
-ggsave("../../out/plot/analysis_R44/27_UMAPCluster_splitDisease_res0.1_OPC_subcluster.pdf",width = 8,height = 4)
+ggsave("../../out/plot/analysis_R44/27_UMAPCluster_splitDisease_res0.1_STROMAL_subcluster.pdf",width = 11,height = 5)
 # DimPlot(data.combined, reduction = "umap", split.by = "origin",label = T,raster = T,ncol=5)
 
 # plot the shortlisted feature per cluster
@@ -148,7 +148,7 @@ test_long01 <- DotPlot(data.combined,
   RotatedAxis() +
   labs(title = "RNA_snn_res.0.1")+
   theme(strip.text = element_text(angle = 90))
-ggsave(plot=test_long01,"../../out/plot/analysis_R44/27_DotplotLong_res0.1_OPC_subcluster.pdf",width = 30,height = 6)
+ggsave(plot=test_long01,"../../out/plot/analysis_R44/27_DotplotLong_res0.1_STROMAL_subcluster.pdf",width = 30,height = 6)
 
 # same as above but as violin plot
 list_plot <- lapply(df_rename_long$rename, function(x){ 
@@ -205,13 +205,13 @@ sobj_total_h.markers <- RunPrestoAll(data.combined, only.pos = TRUE, min.pct = 0
 
 # save the table of all markers
 sobj_total_h.markers %>%
-  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.1_OPC_subcluster.tsv")
+  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.1_STROMAL_subcluster.tsv")
 
 # pick the top 100 markers per cluster
 sobj_total_h.markers %>%
   group_by(cluster) %>%
   dplyr::slice(1:100) %>%
-  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.1_OPC_subcluster_top100.tsv")
+  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.1_STROMAL_subcluster_top100.tsv")
 
 sobj_total_h.markers %>%
   group_by(cluster) %>%
@@ -219,7 +219,7 @@ sobj_total_h.markers %>%
   filter(str_detect(gene,pattern = "^MT-",negate=T)) %>%
   filter(str_detect(gene,pattern = "^RP[SL][[:digit:]]|^RPLP[[:digit:]]|^RPSA",negate=T)) %>%
   filter(str_detect(gene,pattern = "^HB[^(P)]",negate=T)) %>%
-  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.1_OPC_subcluster_top100_noRIBOandMT.tsv")
+  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.1_STROMAL_subcluster_top100_noRIBOandMT.tsv")
 
 # try plotting the top markers
 top_specific_markers <- sobj_total_h.markers %>%
@@ -234,7 +234,7 @@ top_specific_markers <- sobj_total_h.markers %>%
 dittoSeq::dittoDotPlot(data.combined,
                        vars = unique(top_specific_markers$gene), 
                        group.by = "RNA_snn_res.0.1")+scale_color_viridis_c(option = "turbo",name="relative \nexpression")
-ggsave("../../out/plot/analysis_R44/27_Ditto_HarmonySample_res0.1_OPC_subcluster.pdf",width = 10,height = 5)
+ggsave("../../out/plot/analysis_R44/27_Ditto_HarmonySample_res0.1_STROMAL_subcluster.pdf",width = 10,height = 5)
 
 # # plot the proportions
 # df_summary <- data.combined@meta.data %>%
@@ -253,7 +253,7 @@ ggsave("../../out/plot/analysis_R44/27_Ditto_HarmonySample_res0.1_OPC_subcluster
 #   theme(strip.background = element_blank(), axis.text.x = element_text(hjust = 1,angle = 45)) +
 #   facet_wrap(~RNA_snn_res.0.1,scales = "free")+
 #   scale_y_sqrt()
-# ggsave("../../out/plot/analysis_R44/27_plot_clusterProp_res0.1_OPC_subcluster.pdf",height = 8,width = 12)
+# ggsave("../../out/plot/analysis_R44/27_plot_clusterProp_res0.1_STROMAL_subcluster.pdf",height = 8,width = 12)
 
 # try the same with propeller on the same data
 # renv::install("phipsonlab/speckle")
@@ -277,14 +277,14 @@ out_diagnosis <- propeller(clusters = meta_test$RNA_snn_res.0.1,
 
 out_diagnosis %>%
   rownames_to_column("RNA_snn_res.0.1") %>%
-  write_tsv("../../out/table/analysis_R44/27_propeller_res0.1_OPC_subcluster.tsv")
+  write_tsv("../../out/table/analysis_R44/27_propeller_res0.1_STROMAL_subcluster.tsv")
 
 # plotting diagnosis ------------------------------------------------------
 # default plot
 speckle::plotCellTypeProps(x = data.combined,
                            clusters = data.combined$RNA_snn_res.0.1,
                            sample = data.combined$diagnosis_short)+theme_minimal()+theme(panel.grid = element_blank(),axis.text.x = element_text(hjust = 1,angle = 45))
-ggsave("../../out/plot/analysis_R44/27_plot_propeller_res0.1_OPC_subcluster.pdf",height = 5,width = 5)
+ggsave("../../out/plot/analysis_R44/27_plot_propeller_res0.1_STROMAL_subcluster.pdf",height = 5,width = 5)
 
 # custom plot
 df_summary_diagnosis <- meta_test %>% 
@@ -299,7 +299,7 @@ df_summary_diagnosis <- meta_test %>%
          prop = n/tot)
 
 df_summary_diagnosis %>%
-  write_tsv("../../out/table/analysis_R44/27_df_summary_diagnosis_res0.1_OPC_subcluster.tsv")
+  write_tsv("../../out/table/analysis_R44/27_df_summary_diagnosis_res0.1_STROMAL_subcluster.tsv")
 
 # plot 01
 df_summary_diagnosis %>%
@@ -309,7 +309,7 @@ df_summary_diagnosis %>%
   facet_wrap(~RNA_snn_res.0.1,scales = "free")+
   theme_bw()+
   theme(strip.background = element_blank(),axis.text.x = element_text(hjust = 1,angle = 45))
-ggsave("../../out/plot/analysis_R44/27_propeller_plot01_res0.1_OPC_subcluster.pdf",width = 9,height = 6)
+ggsave("../../out/plot/analysis_R44/27_propeller_plot01_res0.1_STROMAL_subcluster.pdf",width = 9,height = 6)
 
 # plot 02
 df_summary_diagnosis %>%
@@ -324,10 +324,10 @@ df_summary_diagnosis %>%
 
 # res 0.4 -----------------------------------------------------------------
 DimPlot(data.combined, reduction = "umap",group.by = "RNA_snn_res.0.4",label = T,raster = F)
-ggsave("../../out/plot/analysis_R44/27_UMAPCluster_res0.4_OPC_subcluster.pdf",width = 4,height = 3)
+ggsave("../../out/plot/analysis_R44/27_UMAPCluster_res0.4_STROMAL_subcluster.pdf",width = 6,height = 5)
 
 DimPlot(data.combined, reduction = "umap",group.by = "RNA_snn_res.0.4",split.by = "diagnosis_short",label = T,raster = F,ncol=4)
-ggsave("../../out/plot/analysis_R44/27_UMAPCluster_splitDisease_res0.4_OPC_subcluster.pdf",width = 8,height = 4)
+ggsave("../../out/plot/analysis_R44/27_UMAPCluster_splitDisease_res0.4_STROMAL_subcluster.pdf",width = 11,height = 5)
 # DimPlot(data.combined, reduction = "umap", split.by = "origin",label = T,raster = T,ncol=5)
 
 # -------------------------------------------------------------------------
@@ -337,18 +337,18 @@ shortlist_features_aletta <- list(
   custom_aletta = c("PDGFRA", "CSPG4", "GPR17", "BCAS1", "OLIG2", "SOX10", "MYRF", "PLP1", "MBP", "MOBP", "MAG", "MOG", "OPALIN", "TPPP", "CNP", "GFAP", "DPP10")
   # ASTRO = c("AQP4","GFAP","CD44","AQP1","VIM","APOE","VCAN","STAT3","ABCA1","TNC","SDC4","SLC1A2","S100B"),
   # NEURONS = c("GAD2","PVALB","SV2C","VIP","TLE4","CUX2","THY1","SLC17A7","NRGN","SATB2","RORB","SST","STX1A","STX1B","SYP","TH","NEFL","SYT1")
-  )
+)
 
 test_long_test <- DotPlot(data.combined,
-                       features = shortlist_features_aletta,
-                       dot.scale = 8,
-                       cluster.idents = T,
-                       group.by = "RNA_snn_res.0.4") +
+                          features = shortlist_features_aletta,
+                          dot.scale = 8,
+                          cluster.idents = T,
+                          group.by = "RNA_snn_res.0.4") +
   RotatedAxis() +
   labs(title = "RNA_snn_res.0.4")+
   theme(strip.text = element_text(angle = 90))
 
-ggsave(plot=test_long_test,"../../out/plot/analysis_R44/27_DotplotAletta_res0.4_OPC_subcluster.pdf",width = 10,height = 6)
+# ggsave(plot=test_long_test,"../../out/plot/analysis_R44/27_DotplotAletta_res0.4_STROMAL_subcluster.pdf",width = 10,height = 6)
 
 # -------------------------------------------------------------------------
 
@@ -362,7 +362,7 @@ test_long01 <- DotPlot(data.combined,
   RotatedAxis() +
   labs(title = "RNA_snn_res.0.4")+
   theme(strip.text = element_text(angle = 90))
-ggsave(plot=test_long01,"../../out/plot/analysis_R44/27_DotplotLong_res0.4_OPC_subcluster.pdf",width = 30,height = 6)
+ggsave(plot=test_long01,"../../out/plot/analysis_R44/27_DotplotLong_res0.4_STROMAL_subcluster.pdf",width = 30,height = 6)
 
 # same as above but as violin plot
 list_plot <- lapply(df_rename_long$rename, function(x){ 
@@ -419,13 +419,13 @@ sobj_total_h.markers <- RunPrestoAll(data.combined, only.pos = TRUE, min.pct = 0
 
 # save the table of all markers
 sobj_total_h.markers %>%
-  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.4_OPC_subcluster.tsv")
+  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.4_STROMAL_subcluster.tsv")
 
 # pick the top 100 markers per cluster
 sobj_total_h.markers %>%
   group_by(cluster) %>%
   dplyr::slice(1:100) %>%
-  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.4_OPC_subcluster_top100.tsv")
+  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.4_STROMAL_subcluster_top100.tsv")
 
 sobj_total_h.markers %>%
   group_by(cluster) %>%
@@ -433,7 +433,7 @@ sobj_total_h.markers %>%
   filter(str_detect(gene,pattern = "^MT-",negate=T)) %>%
   filter(str_detect(gene,pattern = "^RP[SL][[:digit:]]|^RPLP[[:digit:]]|^RPSA",negate=T)) %>%
   filter(str_detect(gene,pattern = "^HB[^(P)]",negate=T)) %>%
-  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.4_OPC_subcluster_top100_noRIBOandMT.tsv")
+  write_tsv("../../out/table/analysis_R44/27_FindAllMarkers_HarmonySample_res0.4_STROMAL_subcluster_top100_noRIBOandMT.tsv")
 
 # try plotting the top markers
 top_specific_markers <- sobj_total_h.markers %>%
@@ -448,7 +448,7 @@ top_specific_markers <- sobj_total_h.markers %>%
 dittoSeq::dittoDotPlot(data.combined,
                        vars = unique(top_specific_markers$gene), 
                        group.by = "RNA_snn_res.0.4")+scale_color_viridis_c(option = "turbo",name="relative \nexpression")
-ggsave("../../out/plot/analysis_R44/27_Ditto_HarmonySample_res0.4_OPC_subcluster.pdf",width = 15,height = 6)
+ggsave("../../out/plot/analysis_R44/27_Ditto_HarmonySample_res0.4_STROMAL_subcluster.pdf",width = 15,height = 6)
 
 # # plot the proportions
 # df_summary <- data.combined@meta.data %>%
@@ -467,7 +467,7 @@ ggsave("../../out/plot/analysis_R44/27_Ditto_HarmonySample_res0.4_OPC_subcluster
 #   theme(strip.background = element_blank(), axis.text.x = element_text(hjust = 1,angle = 45)) +
 #   facet_wrap(~RNA_snn_res.0.4,scales = "free")+
 #   scale_y_sqrt()
-# ggsave("../../out/plot/analysis_R44/27_plot_clusterProp_res0.1_OPC_subcluster.pdf",height = 8,width = 12)
+# ggsave("../../out/plot/analysis_R44/27_plot_clusterProp_res0.1_STROMAL_subcluster.pdf",height = 8,width = 12)
 
 # try the same with propeller on the same data
 # renv::install("phipsonlab/speckle")
@@ -491,14 +491,14 @@ out_diagnosis <- propeller(clusters = meta_test$RNA_snn_res.0.4,
 
 out_diagnosis %>%
   rownames_to_column("RNA_snn_res.0.4") %>%
-  write_tsv("../../out/table/analysis_R44/27_propeller_res0.4_OPC_subcluster.tsv")
+  write_tsv("../../out/table/analysis_R44/27_propeller_res0.4_STROMAL_subcluster.tsv")
 
 # plotting diagnosis ------------------------------------------------------
 # default plot
 speckle::plotCellTypeProps(x = data.combined,
                            clusters = data.combined$RNA_snn_res.0.4,
                            sample = data.combined$diagnosis_short)+theme_minimal()+theme(panel.grid = element_blank(),axis.text.x = element_text(hjust = 1,angle = 45))
-ggsave("../../out/plot/analysis_R44/27_plot_propeller_res0.4_OPC_subcluster.pdf",height = 5,width = 5)
+ggsave("../../out/plot/analysis_R44/27_plot_propeller_res0.4_STROMAL_subcluster.pdf",height = 5,width = 5)
 
 # custom plot
 df_summary_diagnosis <- meta_test %>% 
@@ -513,7 +513,7 @@ df_summary_diagnosis <- meta_test %>%
          prop = n/tot)
 
 df_summary_diagnosis %>%
-  write_tsv("../../out/table/analysis_R44/27_df_summary_diagnosis_res0.4_OPC_subcluster.tsv")
+  write_tsv("../../out/table/analysis_R44/27_df_summary_diagnosis_res0.4_STROMAL_subcluster.tsv")
 
 # plot 01
 df_summary_diagnosis %>%
@@ -523,7 +523,7 @@ df_summary_diagnosis %>%
   facet_wrap(~RNA_snn_res.0.4,scales = "free")+
   theme_bw()+
   theme(strip.background = element_blank(),axis.text.x = element_text(hjust = 1,angle = 45))
-ggsave("../../out/plot/analysis_R44/27_propeller_plot01_res0.4_OPC_subcluster.pdf",width = 9,height = 6)
+ggsave("../../out/plot/analysis_R44/27_propeller_plot01_res0.4_STROMAL_subcluster.pdf",width = 9,height = 6)
 
 # plot 02
 df_summary_diagnosis %>%
