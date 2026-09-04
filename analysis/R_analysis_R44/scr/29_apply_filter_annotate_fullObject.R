@@ -34,17 +34,22 @@ DimPlot(sobj, group.by = "cell_id", label = TRUE, raster = TRUE) + ggtitle("befo
 # default the refined annotation to the coarse cell_id, then override with the subcluster calls
 meta_new <- sobj@meta.data %>%
   select(barcode, cell_id) %>%
-  left_join(meta_annotate %>% select(barcode, cell_id_subcluster), by = "barcode") %>%
+  left_join(meta_annotate %>% select(barcode, cell_id_subcluster,cell_id_subcluster2), by = "barcode") %>%
   mutate(cell_id_subcluster = case_when(
     !is.na(cell_id_subcluster) ~ cell_id_subcluster,
     TRUE ~ cell_id
   )) %>%
-  select(barcode, cell_id_subcluster)
+  mutate(cell_id_subcluster2 = case_when(
+    !is.na(cell_id_subcluster2) ~ cell_id_subcluster2,
+    TRUE ~ cell_id
+  )) %>%
+  select(barcode, cell_id_subcluster,cell_id_subcluster2)
 
 sobj <- AddMetaData(sobj, meta_new)
 
 # confirm the annotation update
-table(sobj$cell_id, sobj$cell_id_subcluster, useNA = "ifany")
+table(sobj$cell_id_subcluster,sobj$cell_id, useNA = "ifany")
+table(sobj$cell_id_subcluster2,sobj$cell_id, useNA = "ifany")
 
 # remove the flagged contaminant barcodes ------------------------------------
 message("Cells before cleanup: ", ncol(sobj))
@@ -55,6 +60,9 @@ message("Cells after cleanup: ", ncol(sobj_clean))
 # rerun only the UMAP, reuse the existing harmony reduction -----------------
 sobj_clean <- sobj_clean %>%
   RunUMAP(reduction = "harmony", dims = 1:30, return.model = TRUE)
+
+table(sobj_clean$cell_id_subcluster,sobj_clean$cell_id, useNA = "ifany")
+table(sobj_clean$cell_id_subcluster2,sobj_clean$cell_id, useNA = "ifany")
 
 # save the new reference ------------------------------------------------------
 saveRDS(sobj_clean, "../../out/object/analysis_R44/29_sobj_integrated_cleanup_manualAnnotation_subclusterFiltered.rds")

@@ -28,10 +28,14 @@ rds_lut <- c(
 #   mutate(cluster_id = as.character(cluster_id))
 lut <- read_csv("../../data/260813_spinal_subcluster_annotation_aletta.csv") %>%
   mutate(cluster_id = as.character(cluster_id)) %>%
-  mutate(new_label = paste0(subcluster_id,"|",anno_aletta_short))
+  # add another covariate as suggested by Aletta. Even if the `anno_aletta_short` is common, make it unique by appending the cluster_id
+  mutate(anno_aletta_short2 = paste(anno_aletta_short,cluster_id,sep = "|")) %>%
+  mutate(new_label = paste0(subcluster_id,"|",anno_aletta_short)) %>%
+  mutate(new_label2 = paste0(subcluster_id,"|",anno_aletta_short2))
 
 # extraction loop -------------------------------------------------------------
 # pop_name <- "STROMAL"
+# pop_name <- "VAS"
 list_out <- lapply(names(rds_lut), function(pop_name) {
   message("\n========== ", pop_name, " ==========")
 
@@ -74,20 +78,21 @@ list_out <- lapply(names(rds_lut), function(pop_name) {
   lut_annotate <- lut_pop %>% filter(action == "none")
   if (nrow(lut_annotate) == 0) {
     message("  No clusters flagged for re-annotation")
-    df_annotate <- tibble(barcode = character(0), subcluster_id = character(0), cell_id_subcluster = character(0))
+    df_annotate <- tibble(barcode = character(0), subcluster_id = character(0), cell_id_subcluster = character(0),cell_id_subcluster2 = character(0))
   } else {
-    df_annotate <- pmap_dfr(lut_annotate, function(cluster_id, new_label, ...) {
+    df_annotate <- pmap_dfr(lut_annotate, function(cluster_id, new_label, new_label2, ...) {
       data.frame(
         barcode = WhichCells(sobj, idents = cluster_id),
         subcluster_id = pop_name,
-        cell_id_subcluster = new_label
+        cell_id_subcluster = new_label,
+        cell_id_subcluster2 = new_label2
       )
     })
     message("  Cells re-annotated: ", nrow(df_annotate))
   }
   
   # shortlit the table
-  test_meta <- lut_annotate %>% dplyr::select(cluster_id,anno_aletta_short,action,note,concern,new_label)
+  test_meta <- lut_annotate %>% dplyr::select(cluster_id,anno_aletta_short,action,note,concern,new_label,new_label2)
   
   # add the new annotation
   meta_fix <- sobj@meta.data %>%
