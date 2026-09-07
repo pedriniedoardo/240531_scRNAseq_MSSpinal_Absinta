@@ -1,0 +1,8 @@
+name: pan-human-azimuth
+channels:
+  - conda-forge
+dependencies:
+  - python=3.9
+  - pip
+  - pip:
+      - panhumanpy==1.0.0

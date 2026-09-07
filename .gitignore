@@ -2,6 +2,8 @@
 out/
 data/
 .Rproj.user/
+.conda*
+.env*
 
 # files
 .Rhistory
@@ -9,6 +11,7 @@ data/
 .Rproj.user
 .Ruserdata
 session.txt
+Rplots.pdf
 
 # Other repository to ignore  
 logs_slurm/ 
