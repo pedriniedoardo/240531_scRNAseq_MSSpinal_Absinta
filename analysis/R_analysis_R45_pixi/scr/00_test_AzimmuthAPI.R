@@ -62,15 +62,18 @@ compute_jaccard_matrix <- function(meta, id_ref_col, id_query_col) {
     column_to_rownames("id_query")
 }
 
-# build a Jaccard-score Heatmap paired with the two side-by-side DimPlots it compares (ref_col vs query_col), so the same figure can be produced for multiple annotation/cluster comparisons.
+# build a Jaccard-score Heatmap paired with the side-by-side DimPlots it compares (ref_col vs query_col, plus an optional third "majority vote" panel), so the same figure can be produced for multiple annotation/cluster comparisons.
 # ref_col and query_col double as both the DimPlot group.by and the heatmap column/row titles.
 # query_reduction defaults to ref_reduction, but pass both explicitly when the two annotations live natively in different reductions (e.g. an original annotation on "umap" vs an azimuth-derived one on "azimuth_umap").
+# majority_col, when given, is a metadata column relabelling every cell of a query_col cluster with that cluster's dominant ref_col annotation -- plotted as a third UMAP so mixed vs. clean clusters are easy to spot against the raw per-cell ref/query views.
 plot_jaccard_comparison <- function(mat_jaccard,
                                      sobj,
                                      ref_col,
                                      query_col,
                                      ref_reduction,
                                      query_reduction = ref_reduction,
+                                     majority_col = NULL,
+                                     majority_reduction = ref_reduction,
                                      label_size = 2.5) {
   ht <- Heatmap(mat_jaccard,
                 name = "Jaccard score",
@@ -94,9 +97,19 @@ plot_jaccard_comparison <- function(mat_jaccard,
   p_query <- DimPlot(sobj, group.by = query_col, label.size = label_size, label = TRUE,
                       reduction = query_reduction, repel = TRUE) + NoLegend()
 
+  plot_list <- list(p_ref, p_query)
+  width_list <- c(1, 1)
+
+  if (!is.null(majority_col)) {
+    p_majority <- DimPlot(sobj, group.by = majority_col, label.size = label_size, label = TRUE,
+                          reduction = majority_reduction, repel = TRUE) + NoLegend()
+    plot_list <- c(plot_list, list(p_majority))
+    width_list <- c(width_list, 1)
+  }
+
   # grid.grabExpr(draw(x)) turns the ComplexHeatmap output into a grob patchwork can lay out alongside the ggplots
-  (p_ref + p_query + grid.grabExpr(draw(ht))) +
-    plot_layout(widths = c(1, 1, 3))
+  wrap_plots(plot_list, nrow = 1) + grid.grabExpr(draw(ht)) +
+    plot_layout(widths = c(width_list, 3))
 }
 
 # parameters --------------------------------------------------------------
@@ -197,9 +210,11 @@ sobj_ann <- RunUMAP(sobj_ann,
   FindClusters(graph.name = "azimuth_snn",
                resolution = seq(0.2, 1, by = 0.2))
 
+# Save the final object
+saveRDS(sobj_ann, "../../out/object/analysis_R45_pixi/00_sobj_ann_AzimuthAPI.rds")
+# sobj_ann <- readRDS("../../out/object/analysis_R45_pixi/00_sobj_ann_AzimuthAPI.rds")
+
 # plot the range of resolutions from the new embedding
-
-
 # try to plot both azimuth annotation and the original one in the new embedding
 p_azimuth_umap <- DimPlot(sobj_ann,
                           group.by = "final_level_labels",
@@ -220,6 +235,38 @@ p_azimuth_umap | p_orig_umap
 #        filename = "../../out/plot/analysis_R45_pixi/00_UMAP_azimuth_embed_finalLevelLabels.pdf",
 #        height = 6, width = 7)
 
+# How many levels are available for each annotation
+sobj_ann@meta.data %>%
+  group_by(azimuth_broad) %>%
+  summarise(n = n())
+
+sobj_ann@meta.data %>%
+  group_by(azimuth_medium) %>%
+  summarise(n = n())
+
+sobj_ann@meta.data %>%
+  group_by(azimuth_fine) %>%
+  summarise(n = n())
+
+sobj_ann@meta.data %>%
+  group_by(final_level_labels) %>%
+  summarise(n = n())
+
+# try to simplify the annotation to show only robusts annotation
+# use the helper prep labels to simplyfy the annotaiton if there are less than 200 cells label them as low-freq-labels
+sobj_ann <- PrepLabel(sobj_ann,
+                       label_id = "final_level_labels",
+                       newid = "final_level_labels_200",
+                       cutid = "low-freq-labels",
+                       cutoff = 200)
+
+# confirm the labels
+sobj_ann@meta.data %>%
+  group_by(final_level_labels_200) %>%
+  summarise(n = n(),.groups = "drop") %>%
+  arrange(desc(n)) %>%
+  print(n = 50)
+
 # ---- Jaccard similarity between cluster assignments and cell type labels ----
 # use the Jaccard score to measure the cross-cluster similarity per cell (how similar are the clusters from the query compared to the annotation derived from the reference)
 
@@ -229,33 +276,493 @@ meta_hc <- sobj_ann@meta.data %>% rownames_to_column("cell_barcode")
 
 # Heatmap A: azimuth_embed-based clusters vs. Pan-human Azimuth cell type labels
 
-# compare the broad cell type we provided with the finer annotation produced by azimuth
-mat_jaccard_01 <- compute_jaccard_matrix(meta_hc, "cell_type", "final_level_labels")
-# compare the broard annotation with the congruent annotation priduced by azimuth
-mat_jaccard_02 <- compute_jaccard_matrix(meta_hc, "cell_type", "azimuth_fine")
-# compare the fine annotation produced by azimuth with the clustering calculated on the azimuth embedding
-mat_jaccard_03 <- compute_jaccard_matrix(meta_hc, "final_level_labels", "azimuth_snn_res.0.4")
-# compare the fine annotation produced by azimuth with the finer annotatoin priduced by aletta
-mat_jaccard_04 <- compute_jaccard_matrix(meta_hc, "final_level_labels", "cell_id_subcluster")
-mat_jaccard_05 <- compute_jaccard_matrix(meta_hc, "final_level_labels", "cell_id_subcluster2")
+# compare the automatic annotation with simplified markers with the one suggested by Aletta
+mat_jaccard_01 <- compute_jaccard_matrix(meta_hc, "cell_id_subcluster2","final_level_labels_200")
 
+p_jaccard_azimuth_01 <- plot_jaccard_comparison(mat_jaccard = mat_jaccard_01,
+                                                sobj = sobj_ann,
+                                                ref_col = "cell_id_subcluster2",
+                                                query_col = "final_level_labels_200",
+                                                ref_reduction = "umap")
 
-p_jaccard_azimuth <- plot_jaccard_comparison(mat_jaccard = mat_jaccard_03,
-                                              sobj = sobj_ann,
-                                              ref_col = "final_level_labels",
-                                              query_col = "azimuth_snn_res.0.4",
-                                              ref_reduction = "azimuth_umap")
+# doing this on the full dataset is not really usefuls
+p_jaccard_azimuth_01
 
-p_jaccard_azimuth
+# ---- Jaccard: panhuman annotation vs cluster assignment -- per-cell-type subclusters ----
+# every 27_<POP>_subcluster_HarmonySample.rds object predates this panhuman annotation run, so transfer final_level_labels onto it from sobj_ann's metadata by barcode, then compare against a cluster_id column on its own "umap" reduction. Each population is processed as its own block (not a shared function) so any population-specific tweaks stay easy to make later.
+# STROMAL/NEU have no manual subcluster annotation yet, so cluster_id is the raw RNA_snn_res.0.4 clustering. ASTRO/IMMUNE/LYM/OLIGO/OPC/VAS already carry Aletta's manual subcluster annotation (data/260813_spinal_subcluster_annotation_aletta.csv, itself keyed on RNA_snn_res.0.4), so cluster_id is cell_id_subcluster2 for those.
 
-ggsave(plot = p_jaccard_azimuth,
-       filename = "../../out/plot/analysis_R45_pixi/00_jaccard_azimuthClusters_vs_finalLevelLabels.pdf",
-       height = 6, width = 16)
+sobj_stromal <- readRDS("../../out/object/analysis_R44/27_STROMAL_subcluster_HarmonySample.rds")
+# add the metadata from the full objetc after panhuman labelling
+sobj_stromal <- AddMetaData(sobj_stromal,metadata = sobj_ann@meta.data[,c("cell_id_subcluster",
+                                                                          "cell_id_subcluster2",
+                                                                          "full_hierarchical_labels",
+                                                                          "final_level_labels",
+                                                                          "final_level_confidence",
+                                                                          "full_consistent_hierarchy",
+                                                                          "azimuth_broad",
+                                                                          "azimuth_medium",
+                                                                          "azimuth_fine",
+                                                                          "azimuth_label",
+                                                                          "azimuth_confidence")])
 
-# other comparisons (mat_jaccard_01/02/04/05) can be plotted the same way,
-# e.g.:
-# plot_jaccard_comparison(mat_jaccard_01, sobj_ann, "cell_type", "final_level_labels",
-#                          ref_reduction = "umap", query_reduction = "azimuth_umap")
+# simplify the annotation also in the subcluster
+sobj_stromal <- PrepLabel(sobj_stromal,
+                          label_id = "final_level_labels",
+                          newid = "final_level_labels_50",
+                          cutid = "z-low-freq-labels",
+                          cutoff = 50)
 
-# ---- Save the final benchmarked object --------------------------------------
-saveRDS(sobj_ann, "../../out/object/analysis_R45_pixi/00_sobj_ann_benchmarked.rds")
+# define a cluster_id for the grouping
+cluster_id <- "RNA_snn_res.0.4"
+
+meta_stromal <- sobj_stromal@meta.data %>% rownames_to_column("cell_barcode")
+mat_jaccard_stromal <- compute_jaccard_matrix(meta_stromal,
+                                              id_query_col = "final_level_labels_50",
+                                              id_ref_col = cluster_id)
+
+# pull the most frequent annotation per cluster_id based on panhuman, and relabel every cell of that cluster with it
+majority_lookup_stromal <- meta_stromal %>%
+  group_by(final_level_labels_50,.data[[cluster_id]]) %>%
+  summarise(n = n(),.groups = "drop") %>%
+  arrange(.data[[cluster_id]],desc(n)) %>%
+  group_by(.data[[cluster_id]]) %>%
+  slice_max(n = 1,order_by = n,with_ties = F) %>%
+  ungroup() %>%
+  # select(-n) %>%
+  rename(majority_label = final_level_labels_50)
+
+meta_stromal2 <- meta_stromal %>%
+  left_join(majority_lookup_stromal, by = cluster_id)
+
+sobj_stromal$majority_label <- meta_stromal2$majority_label
+
+p_jaccard_stromal <- plot_jaccard_comparison(mat_jaccard = mat_jaccard_stromal,
+                                              sobj = sobj_stromal,
+                                              ref_col = "final_level_labels_50",
+                                              query_col = cluster_id,
+                                              ref_reduction = "umap",
+                                              majority_col = "majority_label")
+
+ggsave(plot = p_jaccard_stromal,
+       filename = paste0("../../out/plot/analysis_R45_pixi/00_jaccard_STROMAL_finalLevelLabels50_vs_",cluster_id,".pdf"),
+       height = 6, width = 20)
+
+sobj_neu <- readRDS("../../out/object/analysis_R44/27_NEU_subcluster_HarmonySample.rds")
+# add the metadata from the full objetc after panhuman labelling
+sobj_neu <- AddMetaData(sobj_neu,metadata = sobj_ann@meta.data[,c("cell_id_subcluster",
+                                                                    "cell_id_subcluster2",
+                                                                    "full_hierarchical_labels",
+                                                                    "final_level_labels",
+                                                                    "final_level_confidence",
+                                                                    "full_consistent_hierarchy",
+                                                                    "azimuth_broad",
+                                                                    "azimuth_medium",
+                                                                    "azimuth_fine",
+                                                                    "azimuth_label",
+                                                                    "azimuth_confidence")])
+
+# simplify the annotation also in the subcluster
+sobj_neu <- PrepLabel(sobj_neu,
+                      label_id = "final_level_labels",
+                      newid = "final_level_labels_50",
+                      cutid = "z-low-freq-labels",
+                      cutoff = 50)
+
+# define a cluster_id for the grouping
+cluster_id <- "RNA_snn_res.0.4"
+
+meta_neu <- sobj_neu@meta.data %>% rownames_to_column("cell_barcode")
+mat_jaccard_neu <- compute_jaccard_matrix(meta_neu,
+                                          id_query_col = "final_level_labels_50",
+                                          id_ref_col = cluster_id)
+
+# pull the most frequent annotation per cluster_id based on panhuman, and relabel every cell of that cluster with it
+majority_lookup_neu <- meta_neu %>%
+  group_by(final_level_labels_50,.data[[cluster_id]]) %>%
+  summarise(n = n(),.groups = "drop") %>%
+  arrange(.data[[cluster_id]],desc(n)) %>%
+  group_by(.data[[cluster_id]]) %>%
+  slice_max(n = 1,order_by = n,with_ties = F) %>%
+  ungroup() %>%
+  rename(majority_label = final_level_labels_50)
+
+meta_neu2 <- meta_neu %>%
+  left_join(majority_lookup_neu, by = cluster_id)
+
+sobj_neu$majority_label <- meta_neu2$majority_label
+
+p_jaccard_neu <- plot_jaccard_comparison(mat_jaccard = mat_jaccard_neu,
+                                          sobj = sobj_neu,
+                                          ref_col = "final_level_labels_50",
+                                          query_col = cluster_id,
+                                          ref_reduction = "umap",
+                                          majority_col = "majority_label")
+
+ggsave(plot = p_jaccard_neu,
+       filename = paste0("../../out/plot/analysis_R45_pixi/00_jaccard_NEU_finalLevelLabels50_vs_",cluster_id,".pdf"),
+       height = 6, width = 20)
+
+# -------------------------------------------------------------------------
+# here the one that aletta has provided an annotation
+
+sobj_astro <- readRDS("../../out/object/analysis_R44/27_ASTRO_subcluster_HarmonySample.rds")
+# add the metadata from the full objetc after panhuman labelling
+sobj_astro <- AddMetaData(sobj_astro,metadata = sobj_ann@meta.data[,c("cell_id_subcluster",
+                                                                      "cell_id_subcluster2",
+                                                                        "full_hierarchical_labels",
+                                                                        "final_level_labels",
+                                                                        "final_level_confidence",
+                                                                        "full_consistent_hierarchy",
+                                                                        "azimuth_broad",
+                                                                        "azimuth_medium",
+                                                                        "azimuth_fine",
+                                                                        "azimuth_label",
+                                                                        "azimuth_confidence")])
+
+# simplify the annotation also in the subcluster
+sobj_astro <- PrepLabel(sobj_astro,
+                        label_id = "final_level_labels",
+                        newid = "final_level_labels_50",
+                        cutid = "z-low-freq-labels",
+                        cutoff = 50)
+
+# define a cluster_id for the grouping -- already-annotated populations use Aletta's manual subcluster call
+cluster_id <- "cell_id_subcluster2"
+
+meta_astro <- sobj_astro@meta.data %>% rownames_to_column("cell_barcode")
+
+# some barcodes have no panhuman call (NA final_level_labels_50) or no cluster assignment -- drop them for the jaccard/majority-vote computation rather than let NA pollute the crossing
+meta_astro_hc <- meta_astro %>%
+  filter(!is.na(.data[[cluster_id]]), !is.na(final_level_labels_50))
+
+mat_jaccard_astro <- compute_jaccard_matrix(meta_astro_hc,
+                                            id_query_col = "final_level_labels_50",
+                                            id_ref_col = cluster_id)
+
+# pull the most frequent annotation per cluster_id based on panhuman, and relabel every cell of that cluster with it
+majority_lookup_astro <- meta_astro_hc %>%
+  group_by(final_level_labels_50,.data[[cluster_id]]) %>%
+  summarise(n = n(),.groups = "drop") %>%
+  arrange(.data[[cluster_id]],desc(n)) %>%
+  group_by(.data[[cluster_id]]) %>%
+  slice_max(n = 1,order_by = n,with_ties = F) %>%
+  ungroup() %>%
+  rename(majority_label = final_level_labels_50)
+
+meta_astro2 <- meta_astro %>%
+  left_join(majority_lookup_astro, by = cluster_id)
+
+sobj_astro$majority_label <- meta_astro2$majority_label
+
+p_jaccard_astro <- plot_jaccard_comparison(mat_jaccard = mat_jaccard_astro,
+                                            sobj = sobj_astro,
+                                            ref_col = "final_level_labels_50",
+                                            query_col = cluster_id,
+                                            ref_reduction = "umap",
+                                            majority_col = "majority_label")
+
+ggsave(plot = p_jaccard_astro,
+       filename = paste0("../../out/plot/analysis_R45_pixi/00_jaccard_ASTRO_finalLevelLabels50_vs_",cluster_id,".pdf"),
+       height = 6, width = 20)
+
+sobj_immune <- readRDS("../../out/object/analysis_R44/27_IMMUNE_subcluster_HarmonySample.rds")
+# add the metadata from the full objetc after panhuman labelling
+sobj_immune <- AddMetaData(sobj_immune,metadata = sobj_ann@meta.data[,c("cell_id_subcluster",
+                                                                          "cell_id_subcluster2",
+                                                                          "full_hierarchical_labels",
+                                                                          "final_level_labels",
+                                                                          "final_level_confidence",
+                                                                          "full_consistent_hierarchy",
+                                                                          "azimuth_broad",
+                                                                          "azimuth_medium",
+                                                                          "azimuth_fine",
+                                                                          "azimuth_label",
+                                                                          "azimuth_confidence")])
+
+# simplify the annotation also in the subcluster
+sobj_immune <- PrepLabel(sobj_immune,
+                         label_id = "final_level_labels",
+                         newid = "final_level_labels_50",
+                         cutid = "z-low-freq-labels",
+                         cutoff = 50)
+
+# define a cluster_id for the grouping -- already-annotated populations use Aletta's manual subcluster call
+cluster_id <- "cell_id_subcluster2"
+
+meta_immune <- sobj_immune@meta.data %>% rownames_to_column("cell_barcode")
+
+# some barcodes have no panhuman call (NA final_level_labels_50) or no cluster assignment -- drop them for the jaccard/majority-vote computation rather than let NA pollute the crossing
+meta_immune_hc <- meta_immune %>%
+  filter(!is.na(.data[[cluster_id]]), !is.na(final_level_labels_50))
+
+mat_jaccard_immune <- compute_jaccard_matrix(meta_immune_hc,
+                                             id_query_col = "final_level_labels_50",
+                                             id_ref_col = cluster_id)
+
+# pull the most frequent annotation per cluster_id based on panhuman, and relabel every cell of that cluster with it
+majority_lookup_immune <- meta_immune_hc %>%
+  group_by(final_level_labels_50,.data[[cluster_id]]) %>%
+  summarise(n = n(),.groups = "drop") %>%
+  arrange(.data[[cluster_id]],desc(n)) %>%
+  group_by(.data[[cluster_id]]) %>%
+  slice_max(n = 1,order_by = n,with_ties = F) %>%
+  ungroup() %>%
+  rename(majority_label = final_level_labels_50)
+
+meta_immune2 <- meta_immune %>%
+  left_join(majority_lookup_immune, by = cluster_id)
+
+sobj_immune$majority_label <- meta_immune2$majority_label
+
+p_jaccard_immune <- plot_jaccard_comparison(mat_jaccard = mat_jaccard_immune,
+                                             sobj = sobj_immune,
+                                             ref_col = "final_level_labels_50",
+                                             query_col = cluster_id,
+                                             ref_reduction = "umap",
+                                             majority_col = "majority_label")
+
+ggsave(plot = p_jaccard_immune,
+       filename = paste0("../../out/plot/analysis_R45_pixi/00_jaccard_IMMUNE_finalLevelLabels50_vs_",cluster_id,".pdf"),
+       height = 6, width = 20)
+
+sobj_lym <- readRDS("../../out/object/analysis_R44/27_LYM_subcluster_HarmonySample.rds")
+# add the metadata from the full objetc after panhuman labelling
+sobj_lym <- AddMetaData(sobj_lym,metadata = sobj_ann@meta.data[,c("cell_id_subcluster",
+                                                                    "cell_id_subcluster2",
+                                                                    "full_hierarchical_labels",
+                                                                    "final_level_labels",
+                                                                    "final_level_confidence",
+                                                                    "full_consistent_hierarchy",
+                                                                    "azimuth_broad",
+                                                                    "azimuth_medium",
+                                                                    "azimuth_fine",
+                                                                    "azimuth_label",
+                                                                    "azimuth_confidence")])
+
+# simplify the annotation also in the subcluster
+sobj_lym <- PrepLabel(sobj_lym,
+                      label_id = "final_level_labels",
+                      newid = "final_level_labels_50",
+                      cutid = "z-low-freq-labels",
+                      cutoff = 50)
+
+# define a cluster_id for the grouping -- already-annotated populations use Aletta's manual subcluster call
+cluster_id <- "cell_id_subcluster2"
+
+meta_lym <- sobj_lym@meta.data %>% rownames_to_column("cell_barcode")
+
+# some barcodes have no panhuman call (NA final_level_labels_50) or no cluster assignment -- drop them for the jaccard/majority-vote computation rather than let NA pollute the crossing
+meta_lym_hc <- meta_lym %>%
+  filter(!is.na(.data[[cluster_id]]), !is.na(final_level_labels_50))
+
+mat_jaccard_lym <- compute_jaccard_matrix(meta_lym_hc,
+                                          id_query_col = "final_level_labels_50",
+                                          id_ref_col = cluster_id)
+
+# pull the most frequent annotation per cluster_id based on panhuman, and relabel every cell of that cluster with it
+majority_lookup_lym <- meta_lym_hc %>%
+  group_by(final_level_labels_50,.data[[cluster_id]]) %>%
+  summarise(n = n(),.groups = "drop") %>%
+  arrange(.data[[cluster_id]],desc(n)) %>%
+  group_by(.data[[cluster_id]]) %>%
+  slice_max(n = 1,order_by = n,with_ties = F) %>%
+  ungroup() %>%
+  rename(majority_label = final_level_labels_50)
+
+meta_lym2 <- meta_lym %>%
+  left_join(majority_lookup_lym, by = cluster_id)
+
+sobj_lym$majority_label <- meta_lym2$majority_label
+
+p_jaccard_lym <- plot_jaccard_comparison(mat_jaccard = mat_jaccard_lym,
+                                          sobj = sobj_lym,
+                                          ref_col = "final_level_labels_50",
+                                          query_col = cluster_id,
+                                          ref_reduction = "umap",
+                                          majority_col = "majority_label")
+
+ggsave(plot = p_jaccard_lym,
+       filename = paste0("../../out/plot/analysis_R45_pixi/00_jaccard_LYM_finalLevelLabels50_vs_",cluster_id,".pdf"),
+       height = 6, width = 20)
+
+sobj_oligo <- readRDS("../../out/object/analysis_R44/27_OLIGO_subcluster_HarmonySample.rds")
+# add the metadata from the full objetc after panhuman labelling
+sobj_oligo <- AddMetaData(sobj_oligo,metadata = sobj_ann@meta.data[,c("cell_id_subcluster",
+                                                                        "cell_id_subcluster2",
+                                                                        "full_hierarchical_labels",
+                                                                        "final_level_labels",
+                                                                        "final_level_confidence",
+                                                                        "full_consistent_hierarchy",
+                                                                        "azimuth_broad",
+                                                                        "azimuth_medium",
+                                                                        "azimuth_fine",
+                                                                        "azimuth_label",
+                                                                        "azimuth_confidence")])
+
+# simplify the annotation also in the subcluster
+sobj_oligo <- PrepLabel(sobj_oligo,
+                        label_id = "final_level_labels",
+                        newid = "final_level_labels_50",
+                        cutid = "z-low-freq-labels",
+                        cutoff = 50)
+
+# define a cluster_id for the grouping -- already-annotated populations use Aletta's manual subcluster call
+cluster_id <- "cell_id_subcluster2"
+
+meta_oligo <- sobj_oligo@meta.data %>% rownames_to_column("cell_barcode")
+
+# some barcodes have no panhuman call (NA final_level_labels_50) or no cluster assignment -- drop them for the jaccard/majority-vote computation rather than let NA pollute the crossing
+meta_oligo_hc <- meta_oligo %>%
+  filter(!is.na(.data[[cluster_id]]), !is.na(final_level_labels_50))
+
+mat_jaccard_oligo <- compute_jaccard_matrix(meta_oligo_hc,
+                                            id_query_col = "final_level_labels_50",
+                                            id_ref_col = cluster_id)
+
+# pull the most frequent annotation per cluster_id based on panhuman, and relabel every cell of that cluster with it
+majority_lookup_oligo <- meta_oligo_hc %>%
+  group_by(final_level_labels_50,.data[[cluster_id]]) %>%
+  summarise(n = n(),.groups = "drop") %>%
+  arrange(.data[[cluster_id]],desc(n)) %>%
+  group_by(.data[[cluster_id]]) %>%
+  slice_max(n = 1,order_by = n,with_ties = F) %>%
+  ungroup() %>%
+  rename(majority_label = final_level_labels_50)
+
+meta_oligo2 <- meta_oligo %>%
+  left_join(majority_lookup_oligo, by = cluster_id)
+
+sobj_oligo$majority_label <- meta_oligo2$majority_label
+
+p_jaccard_oligo <- plot_jaccard_comparison(mat_jaccard = mat_jaccard_oligo,
+                                            sobj = sobj_oligo,
+                                            ref_col = "final_level_labels_50",
+                                            query_col = cluster_id,
+                                            ref_reduction = "umap",
+                                            majority_col = "majority_label")
+
+ggsave(plot = p_jaccard_oligo,
+       filename = paste0("../../out/plot/analysis_R45_pixi/00_jaccard_OLIGO_finalLevelLabels50_vs_",cluster_id,".pdf"),
+       height = 6, width = 20)
+
+sobj_opc <- readRDS("../../out/object/analysis_R44/27_OPC_subcluster_HarmonySample.rds")
+# add the metadata from the full objetc after panhuman labelling
+sobj_opc <- AddMetaData(sobj_opc,metadata = sobj_ann@meta.data[,c("cell_id_subcluster",
+                                                                    "cell_id_subcluster2",
+                                                                    "full_hierarchical_labels",
+                                                                    "final_level_labels",
+                                                                    "final_level_confidence",
+                                                                    "full_consistent_hierarchy",
+                                                                    "azimuth_broad",
+                                                                    "azimuth_medium",
+                                                                    "azimuth_fine",
+                                                                    "azimuth_label",
+                                                                    "azimuth_confidence")])
+
+# simplify the annotation also in the subcluster
+sobj_opc <- PrepLabel(sobj_opc,
+                      label_id = "final_level_labels",
+                      newid = "final_level_labels_50",
+                      cutid = "z-low-freq-labels",
+                      cutoff = 50)
+
+# define a cluster_id for the grouping -- already-annotated populations use Aletta's manual subcluster call
+cluster_id <- "cell_id_subcluster2"
+
+meta_opc <- sobj_opc@meta.data %>% rownames_to_column("cell_barcode")
+
+# some barcodes have no panhuman call (NA final_level_labels_50) or no cluster assignment -- drop them for the jaccard/majority-vote computation rather than let NA pollute the crossing
+meta_opc_hc <- meta_opc %>%
+  filter(!is.na(.data[[cluster_id]]), !is.na(final_level_labels_50))
+
+mat_jaccard_opc <- compute_jaccard_matrix(meta_opc_hc,
+                                          id_query_col = "final_level_labels_50",
+                                          id_ref_col = cluster_id)
+
+# pull the most frequent annotation per cluster_id based on panhuman, and relabel every cell of that cluster with it
+majority_lookup_opc <- meta_opc_hc %>%
+  group_by(final_level_labels_50,.data[[cluster_id]]) %>%
+  summarise(n = n(),.groups = "drop") %>%
+  arrange(.data[[cluster_id]],desc(n)) %>%
+  group_by(.data[[cluster_id]]) %>%
+  slice_max(n = 1,order_by = n,with_ties = F) %>%
+  ungroup() %>%
+  rename(majority_label = final_level_labels_50)
+
+meta_opc2 <- meta_opc %>%
+  left_join(majority_lookup_opc, by = cluster_id)
+
+sobj_opc$majority_label <- meta_opc2$majority_label
+
+p_jaccard_opc <- plot_jaccard_comparison(mat_jaccard = mat_jaccard_opc,
+                                          sobj = sobj_opc,
+                                          ref_col = "final_level_labels_50",
+                                          query_col = cluster_id,
+                                          ref_reduction = "umap",
+                                          majority_col = "majority_label")
+
+ggsave(plot = p_jaccard_opc,
+       filename = paste0("../../out/plot/analysis_R45_pixi/00_jaccard_OPC_finalLevelLabels50_vs_",cluster_id,".pdf"),
+       height = 6, width = 20)
+
+sobj_vas <- readRDS("../../out/object/analysis_R44/27_VAS_subcluster_HarmonySample.rds")
+# add the metadata from the full objetc after panhuman labelling
+sobj_vas <- AddMetaData(sobj_vas,metadata = sobj_ann@meta.data[,c("cell_id_subcluster",
+                                                                    "cell_id_subcluster2",
+                                                                    "full_hierarchical_labels",
+                                                                    "final_level_labels",
+                                                                    "final_level_confidence",
+                                                                    "full_consistent_hierarchy",
+                                                                    "azimuth_broad",
+                                                                    "azimuth_medium",
+                                                                    "azimuth_fine",
+                                                                    "azimuth_label",
+                                                                    "azimuth_confidence")])
+
+# simplify the annotation also in the subcluster
+sobj_vas <- PrepLabel(sobj_vas,
+                      label_id = "final_level_labels",
+                      newid = "final_level_labels_50",
+                      cutid = "z-low-freq-labels",
+                      cutoff = 50)
+
+# define a cluster_id for the grouping -- already-annotated populations use Aletta's manual subcluster call
+cluster_id <- "cell_id_subcluster2"
+
+meta_vas <- sobj_vas@meta.data %>% rownames_to_column("cell_barcode")
+
+# some barcodes have no panhuman call (NA final_level_labels_50) or no cluster assignment -- drop them for the jaccard/majority-vote computation rather than let NA pollute the crossing
+meta_vas_hc <- meta_vas %>%
+  filter(!is.na(.data[[cluster_id]]), !is.na(final_level_labels_50))
+
+mat_jaccard_vas <- compute_jaccard_matrix(meta_vas_hc,
+                                          id_query_col = "final_level_labels_50",
+                                          id_ref_col = cluster_id)
+
+# pull the most frequent annotation per cluster_id based on panhuman, and relabel every cell of that cluster with it
+majority_lookup_vas <- meta_vas_hc %>%
+  group_by(final_level_labels_50,.data[[cluster_id]]) %>%
+  summarise(n = n(),.groups = "drop") %>%
+  arrange(.data[[cluster_id]],desc(n)) %>%
+  group_by(.data[[cluster_id]]) %>%
+  slice_max(n = 1,order_by = n,with_ties = F) %>%
+  ungroup() %>%
+  rename(majority_label = final_level_labels_50)
+
+meta_vas2 <- meta_vas %>%
+  left_join(majority_lookup_vas, by = cluster_id)
+
+sobj_vas$majority_label <- meta_vas2$majority_label
+
+p_jaccard_vas <- plot_jaccard_comparison(mat_jaccard = mat_jaccard_vas,
+                                          sobj = sobj_vas,
+                                          ref_col = "final_level_labels_50",
+                                          query_col = cluster_id,
+                                          ref_reduction = "umap",
+                                          majority_col = "majority_label")
+
+ggsave(plot = p_jaccard_vas,
+       filename = paste0("../../out/plot/analysis_R45_pixi/00_jaccard_VAS_finalLevelLabels50_vs_",cluster_id,".pdf"),
+       height = 6, width = 20)
+
