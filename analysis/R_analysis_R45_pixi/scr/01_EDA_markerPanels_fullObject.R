@@ -21,6 +21,10 @@ options(Seurat.object.assay.version = "v5")
 sobj <- readRDS("../../out/object/analysis_R44/29_sobj_integrated_cleanup_manualAnnotation_subclusterFiltered.rds")
 DefaultAssay(sobj) <- "RNA"
 
+# save the full metadata with the current draft anntoation from Martina
+sobj@meta.data %>% group_by(cell_id_subcluster,cell_id_subcluster2) %>% summarise(n = n()) %>%
+  write_tsv("../../out/table/analysis_R45_pixi/01_meta_29_sobj_integrated_cleanup_manualAnnotation_subclusterFiltered.tsv")
+
 out_plot_dir <- "../../out/plot/analysis_R45_pixi"
 
 # helper A: DotPlot a named gene-panel list for the target populations only, at fine resolution (group_col) -- the original focal-only view --------
