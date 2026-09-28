@@ -89,7 +89,8 @@ df_hits <- tibble(
   count = viral_counts[hits]
 ) %>%
   mutate(sample_id = merged@meta.data[barcode, "orig.ident"],
-         nCount_RNA = merged@meta.data[barcode, "nCount_RNA"]) %>%
+         nCount_RNA = merged@meta.data[barcode, "nCount_RNA"],
+         scDblFinder.class = merged@meta.data[barcode, "scDblFinder.class"]) %>%
   arrange(desc(count))
 
 if (nrow(df_hits) == 0) {
