@@ -16,13 +16,9 @@ Rplots.pdf
 # Other repository to ignore  
 logs_slurm/ 
 logs/
-rcloneDropboxHSR*.err
-rcloneDropboxHSR*.log
-rcloneDropboxHSR*.out
-rcloneGdrivePersonal*.err
-rcloneGdrivePersonal*.log
-rcloneGdrivePersonal*.out
-
+*.err
+*.log
+*.out
 
 # ----------------------------------------------------------------
 # Quarto Specific

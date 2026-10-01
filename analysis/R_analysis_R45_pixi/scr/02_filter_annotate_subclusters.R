@@ -1,5 +1,7 @@
 # AIM ---------------------------------------------------------------------
-# After the lab meeting with the greoup we did a further cleanup pass over the 27_*_subcluster_HarmonySample.R / _plot.R outputs and flagged, per subpopulation, (1) contaminant clusters to remove and (2) clusters that need a refined annotation label.
+# After the lab meeting with the group we did a further cleanup pass over the 27_*_subcluster_HarmonySample.R / _plot.R outputs and flagged, per subpopulation:
+# (1) contaminant clusters to remove and
+# (2) clusters that need a refined annotation label.
 # The calls are in ../../data/260816_spinal_sublcuster_annotation_aletta_v2.csv (subcluster_id,col_meta,cluster_id,action,cell_id_subcluster,cell_id_subcluster2,cell_id_subcluster3).
 # This script does NOT touch the subcluster objects themselves: it only harvests barcodes + new metadata so they can be merged back onto the R44-cleaned full integrated object (29_sobj_integrated_cleanup_manualAnnotation_subclusterFiltered.rds) in 03_apply_filter_annotate_fullObject.R, where the object is subset and only the UMAP is recomputed (removal is minimal, so PCA/Harmony are not rerun).
 

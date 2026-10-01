@@ -47,11 +47,14 @@ stopifnot(length(viral_genes) == 86)
 # per sample: load the raw (full-barcode) matrix, characterize every barcode, then trim to viral genes and keep only nonzero hits
 # sample_id <- "s2000_090"
 
-df_hits <- map_dfr(sample_ids, function(sample_id) {
+# each sample returns a list: a one-row summary (always) + its viral hits (possibly empty)
+list_res <- map(sample_ids, function(sample_id) {
   raw_dir <- file.path(dir_cellranger, sample_id, "outs", "raw_feature_bc_matrix")
   if (!dir.exists(raw_dir)) {
     message("sample: ", sample_id, "  -- no raw_feature_bc_matrix, skipping")
-    return(tibble())
+    return(list(summary = tibble(sample_id = sample_id, n_raw_barcodes = NA_integer_, n_genes = NA_integer_,
+                                 n_viral_genes_present = NA_integer_, n_viral_hits = 0L, total_viral_UMI = 0, n_called_cell_hits = 0L),
+                hits = tibble()))
   }
   message("sample: ", sample_id, "  loading raw matrix...")
   
@@ -76,6 +79,7 @@ df_hits <- map_dfr(sample_ids, function(sample_id) {
   }
 
   # now trim to the viral panel and pull out nonzero entries (sparse-native, no densifying at ~1.2M-barcode scale)
+  n_genes_total <- nrow(obj)
   genes_present <- intersect(viral_genes, rownames(obj))
   # check if there is any gene missing
   setdiff(viral_genes, rownames(obj))
@@ -84,10 +88,13 @@ df_hits <- map_dfr(sample_ids, function(sample_id) {
   meta <- obj@meta.data
   rm(obj); gc()
 
+  n_barcodes <- nrow(meta)
   nz <- summary(viral_counts)  # i/j/x for every nonzero entry, sparse-native
   if (nrow(nz) == 0) {
     message("  no nonzero viral-panel entries in this sample's raw matrix")
-    return(tibble())
+    return(list(summary = tibble(sample_id = sample_id, n_raw_barcodes = n_barcodes, n_genes = n_genes_total,
+                                 n_viral_genes_present = length(genes_present), n_viral_hits = 0L, total_viral_UMI = 0, n_called_cell_hits = 0L),
+                hits = tibble()))
   }
 
   out <- tibble(
@@ -101,8 +108,17 @@ df_hits <- map_dfr(sample_ids, function(sample_id) {
     is_called_cell = colnames(viral_counts)[nz$j] %in% called_barcodes
   )
   message("  ", nrow(out), " nonzero viral-panel (gene, barcode) hit(s), total UMI: ", sum(out$count))
-  return(out)
+  return(list(summary = tibble(sample_id = sample_id, n_raw_barcodes = n_barcodes, n_genes = n_genes_total,
+                               n_viral_genes_present = length(genes_present), n_viral_hits = nrow(out),
+                               total_viral_UMI = sum(out$count), n_called_cell_hits = sum(out$is_called_cell)),
+              hits = out))
 })
+
+# per-sample summary (same numbers as printed in the log), written even when there are no hits
+df_summary <- map_dfr(list_res, "summary")
+df_hits <- map_dfr(list_res, "hits")
+df_summary
+write_tsv(df_summary, file.path(out_table_dir, paste0(out_prefix, "_perSampleSummary.tsv")))
 
 # cross-check hits against this pipeline's own postQC Seurat object (doublet-called, QC-filtered) only opened for samples that actually had a raw hit, not all 25, to stay "quick"
 if (nrow(df_hits) == 0) {
