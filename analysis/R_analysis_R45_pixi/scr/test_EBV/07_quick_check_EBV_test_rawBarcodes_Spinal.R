@@ -52,7 +52,7 @@ list_res <- map(sample_ids, function(sample_id) {
   raw_dir <- file.path(dir_cellranger, sample_id, "outs", "raw_feature_bc_matrix")
   if (!dir.exists(raw_dir)) {
     message("sample: ", sample_id, "  -- no raw_feature_bc_matrix, skipping")
-    return(list(summary = tibble(sample_id = sample_id, n_raw_barcodes = NA_integer_, n_genes = NA_integer_,
+    return(list(summary = tibble(sample_id = sample_id, n_raw_barcodes = NA_integer_, total_UMI = NA_real_, n_genes = NA_integer_,
                                  n_viral_genes_present = NA_integer_, n_viral_hits = 0L, total_viral_UMI = 0, n_called_cell_hits = 0L),
                 hits = tibble()))
   }
@@ -89,10 +89,12 @@ list_res <- map(sample_ids, function(sample_id) {
   rm(obj); gc()
 
   n_barcodes <- nrow(meta)
+  # total UMI over ALL raw barcodes (empty droplets included): the depth term to normalise the viral hits
+  total_UMI <- sum(meta$nCount_RNA)
   nz <- summary(viral_counts)  # i/j/x for every nonzero entry, sparse-native
   if (nrow(nz) == 0) {
     message("  no nonzero viral-panel entries in this sample's raw matrix")
-    return(list(summary = tibble(sample_id = sample_id, n_raw_barcodes = n_barcodes, n_genes = n_genes_total,
+    return(list(summary = tibble(sample_id = sample_id, n_raw_barcodes = n_barcodes, total_UMI = total_UMI, n_genes = n_genes_total,
                                  n_viral_genes_present = length(genes_present), n_viral_hits = 0L, total_viral_UMI = 0, n_called_cell_hits = 0L),
                 hits = tibble()))
   }
@@ -108,7 +110,7 @@ list_res <- map(sample_ids, function(sample_id) {
     is_called_cell = colnames(viral_counts)[nz$j] %in% called_barcodes
   )
   message("  ", nrow(out), " nonzero viral-panel (gene, barcode) hit(s), total UMI: ", sum(out$count))
-  return(list(summary = tibble(sample_id = sample_id, n_raw_barcodes = n_barcodes, n_genes = n_genes_total,
+  return(list(summary = tibble(sample_id = sample_id, n_raw_barcodes = n_barcodes, total_UMI = total_UMI, n_genes = n_genes_total,
                                n_viral_genes_present = length(genes_present), n_viral_hits = nrow(out),
                                total_viral_UMI = sum(out$count), n_called_cell_hits = sum(out$is_called_cell)),
               hits = out))

@@ -73,7 +73,7 @@ df_summary_spinal <- left_join(summary_spinal, lut_spinal, by = "sample_id")
 # Brain WM/CX (Absinta): the official id (e.g. s9) is embedded in the pipeline sample name (GSM...__s9__Homo_sapiens__RNA-Seq)
 # the sample_id of the LUT is the original library name, so it is dropped to avoid clashing with the pipeline sample_id
 df_summary_brain <- summary_brain %>%
-  mutate(official_id = str_extract(sample_id, "__(s\\d+)__",group = 1)) %>%
+  mutate(official_id = str_extract(sample_id, "_(s\\d+)",group = 1)) %>%
   left_join(select(lut_brain, -sample_id), by = "official_id")
 
 # Visium brain
@@ -101,7 +101,7 @@ df_group_spinal <- df_summary_spinal %>%
   group_by(diagnosis) %>%
   summarise(n_samples = n(),
             tot_barcode = sum(n_raw_barcodes, na.rm = TRUE),
-            # tot_UMI = sum(total_UMI, na.rm = TRUE),
+            tot_UMI = sum(total_UMI, na.rm = TRUE),
             tot_viral_hits = sum(n_viral_hits, na.rm = TRUE),
             tot_called_hits = sum(n_called_cell_hits, na.rm = TRUE))
 
@@ -109,7 +109,7 @@ df_group_brain <- df_summary_brain %>%
   group_by(pathology_class) %>%
   summarise(n_samples = n(),
             tot_barcode = sum(n_raw_barcodes, na.rm = TRUE),
-            # tot_UMI = sum(total_UMI, na.rm = TRUE),
+            tot_UMI = sum(total_UMI, na.rm = TRUE),
             tot_viral_hits = sum(n_viral_hits, na.rm = TRUE),
             tot_called_hits = sum(n_called_cell_hits, na.rm = TRUE))
 
@@ -117,7 +117,7 @@ df_group_visium <- df_summary_brain_visium %>%
   group_by(sample_classification2) %>%
   summarise(n_samples = n(),
             tot_barcode = sum(n_raw_barcodes, na.rm = TRUE),
-            # tot_UMI = sum(total_UMI, na.rm = TRUE),
+            tot_UMI = sum(total_UMI, na.rm = TRUE),
             tot_viral_hits = sum(n_viral_hits, na.rm = TRUE),
             tot_called_hits = sum(n_called_cell_hits, na.rm = TRUE))
 
@@ -125,7 +125,7 @@ df_group_gse189141 <- df_summary_gse189141 %>%
   group_by(time_point) %>%
   summarise(n_samples = n(),
             tot_barcode = sum(n_raw_barcodes, na.rm = TRUE),
-            # tot_UMI = sum(total_UMI, na.rm = TRUE),
+            tot_UMI = sum(total_UMI, na.rm = TRUE),
             tot_viral_hits = sum(n_viral_hits, na.rm = TRUE),
             tot_called_hits = sum(n_called_cell_hits, na.rm = TRUE))
 
